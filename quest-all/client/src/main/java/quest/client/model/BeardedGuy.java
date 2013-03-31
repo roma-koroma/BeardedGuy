@@ -18,8 +18,9 @@ public class BeardedGuy
     private String name;
 
     private static final String DEFAULT_NAME = "Unknown guy";
+	private int id;
 
-    public BeardedGuy(String name, Point position)
+	public BeardedGuy(String name, Point position)
     {
         this.name = name;
         this.position = position;
@@ -85,4 +86,19 @@ public class BeardedGuy
     {
         this.name = name;
     }
+
+	public int getId()
+	{
+		return id;
+	}
+
+	public void setId(int id)
+	{
+		this.id = id;
+	}
+
+	public String getName()
+	{
+		return name;
+	}
 }

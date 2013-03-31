@@ -596,12 +596,14 @@ public final class ClientMessage {
       DOWN_KEY(1, 2),
       LEFT_KEY(2, 3),
       RIGHT_KEY(3, 4),
+      NONE(4, 5),
       ;
       
       public static final int UP_KEY_VALUE = 1;
       public static final int DOWN_KEY_VALUE = 2;
       public static final int LEFT_KEY_VALUE = 3;
       public static final int RIGHT_KEY_VALUE = 4;
+      public static final int NONE_VALUE = 5;
       
       
       public final int getNumber() { return value; }
@@ -612,6 +614,7 @@ public final class ClientMessage {
           case 2: return DOWN_KEY;
           case 3: return LEFT_KEY;
           case 4: return RIGHT_KEY;
+          case 5: return NONE;
           default: return null;
         }
       }
@@ -642,7 +645,7 @@ public final class ClientMessage {
       }
       
       private static final Input[] VALUES = {
-        UP_KEY, DOWN_KEY, LEFT_KEY, RIGHT_KEY, 
+        UP_KEY, DOWN_KEY, LEFT_KEY, RIGHT_KEY, NONE, 
       };
       
       public static Input valueOf(
@@ -1055,11 +1058,11 @@ public final class ClientMessage {
       "st/Common.proto\"{\n\017ClientOperation\022.\n\top" +
       "eration\030\001 \002(\0162\033.quest.ClientOperation.Ty" +
       "pe\022\020\n\010clientId\030\002 \002(\r\022\023\n\013bodyMessage\030\003 \001(" +
-      "\014\"\021\n\004Type\022\t\n\005INPUT\020\001\"|\n\016InputOperation\022*" +
-      "\n\005input\030\001 \003(\0162\033.quest.InputOperation.Inp" +
-      "ut\">\n\005Input\022\n\n\006UP_KEY\020\001\022\014\n\010DOWN_KEY\020\002\022\014\n" +
-      "\010LEFT_KEY\020\003\022\r\n\tRIGHT_KEY\020\004B\037\n\016quest.prot" +
-      "ocolB\rClientMessage"
+      "\014\"\021\n\004Type\022\t\n\005INPUT\020\001\"\206\001\n\016InputOperation\022" +
+      "*\n\005input\030\001 \003(\0162\033.quest.InputOperation.In" +
+      "put\"H\n\005Input\022\n\n\006UP_KEY\020\001\022\014\n\010DOWN_KEY\020\002\022\014" +
+      "\n\010LEFT_KEY\020\003\022\r\n\tRIGHT_KEY\020\004\022\010\n\004NONE\020\005B\037\n" +
+      "\016quest.protocolB\rClientMessage"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -1088,7 +1091,7 @@ public final class ClientMessage {
     com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
-          quest.protocol.СommonMessages.getDescriptor(),
+          quest.protocol.CommonMessages.getDescriptor(),
         }, assigner);
   }
   

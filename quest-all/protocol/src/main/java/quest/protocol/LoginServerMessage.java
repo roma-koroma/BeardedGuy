@@ -502,8 +502,8 @@ public final class LoginServerMessage {
     
     // optional .User user = 2;
     boolean hasUser();
-    quest.protocol.СommonMessages.User getUser();
-    quest.protocol.СommonMessages.UserOrBuilder getUserOrBuilder();
+    quest.protocol.CommonMessages.User getUser();
+    quest.protocol.CommonMessages.UserOrBuilder getUserOrBuilder();
   }
   public static final class AuthOperationResult extends
       com.google.protobuf.GeneratedMessage
@@ -546,20 +546,20 @@ public final class LoginServerMessage {
     
     // optional .User user = 2;
     public static final int USER_FIELD_NUMBER = 2;
-    private quest.protocol.СommonMessages.User user_;
+    private quest.protocol.CommonMessages.User user_;
     public boolean hasUser() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
-    public quest.protocol.СommonMessages.User getUser() {
+    public quest.protocol.CommonMessages.User getUser() {
       return user_;
     }
-    public quest.protocol.СommonMessages.UserOrBuilder getUserOrBuilder() {
+    public quest.protocol.CommonMessages.UserOrBuilder getUserOrBuilder() {
       return user_;
     }
     
     private void initFields() {
       isSuccess_ = false;
-      user_ = quest.protocol.СommonMessages.User.getDefaultInstance();
+      user_ = quest.protocol.CommonMessages.User.getDefaultInstance();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -734,7 +734,7 @@ public final class LoginServerMessage {
         isSuccess_ = false;
         bitField0_ = (bitField0_ & ~0x00000001);
         if (userBuilder_ == null) {
-          user_ = quest.protocol.СommonMessages.User.getDefaultInstance();
+          user_ = quest.protocol.CommonMessages.User.getDefaultInstance();
         } else {
           userBuilder_.clear();
         }
@@ -858,7 +858,7 @@ public final class LoginServerMessage {
               break;
             }
             case 18: {
-              quest.protocol.СommonMessages.User.Builder subBuilder = quest.protocol.СommonMessages.User.newBuilder();
+              quest.protocol.CommonMessages.User.Builder subBuilder = quest.protocol.CommonMessages.User.newBuilder();
               if (hasUser()) {
                 subBuilder.mergeFrom(getUser());
               }
@@ -894,20 +894,20 @@ public final class LoginServerMessage {
       }
       
       // optional .User user = 2;
-      private quest.protocol.СommonMessages.User user_ = quest.protocol.СommonMessages.User.getDefaultInstance();
+      private quest.protocol.CommonMessages.User user_ = quest.protocol.CommonMessages.User.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
-          quest.protocol.СommonMessages.User, quest.protocol.СommonMessages.User.Builder, quest.protocol.СommonMessages.UserOrBuilder> userBuilder_;
+          quest.protocol.CommonMessages.User, quest.protocol.CommonMessages.User.Builder, quest.protocol.CommonMessages.UserOrBuilder> userBuilder_;
       public boolean hasUser() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
-      public quest.protocol.СommonMessages.User getUser() {
+      public quest.protocol.CommonMessages.User getUser() {
         if (userBuilder_ == null) {
           return user_;
         } else {
           return userBuilder_.getMessage();
         }
       }
-      public Builder setUser(quest.protocol.СommonMessages.User value) {
+      public Builder setUser(quest.protocol.CommonMessages.User value) {
         if (userBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -921,7 +921,7 @@ public final class LoginServerMessage {
         return this;
       }
       public Builder setUser(
-          quest.protocol.СommonMessages.User.Builder builderForValue) {
+          quest.protocol.CommonMessages.User.Builder builderForValue) {
         if (userBuilder_ == null) {
           user_ = builderForValue.build();
           onChanged();
@@ -931,12 +931,12 @@ public final class LoginServerMessage {
         bitField0_ |= 0x00000002;
         return this;
       }
-      public Builder mergeUser(quest.protocol.СommonMessages.User value) {
+      public Builder mergeUser(quest.protocol.CommonMessages.User value) {
         if (userBuilder_ == null) {
           if (((bitField0_ & 0x00000002) == 0x00000002) &&
-              user_ != quest.protocol.СommonMessages.User.getDefaultInstance()) {
+              user_ != quest.protocol.CommonMessages.User.getDefaultInstance()) {
             user_ =
-              quest.protocol.СommonMessages.User.newBuilder(user_).mergeFrom(value).buildPartial();
+              quest.protocol.CommonMessages.User.newBuilder(user_).mergeFrom(value).buildPartial();
           } else {
             user_ = value;
           }
@@ -949,7 +949,7 @@ public final class LoginServerMessage {
       }
       public Builder clearUser() {
         if (userBuilder_ == null) {
-          user_ = quest.protocol.СommonMessages.User.getDefaultInstance();
+          user_ = quest.protocol.CommonMessages.User.getDefaultInstance();
           onChanged();
         } else {
           userBuilder_.clear();
@@ -957,12 +957,12 @@ public final class LoginServerMessage {
         bitField0_ = (bitField0_ & ~0x00000002);
         return this;
       }
-      public quest.protocol.СommonMessages.User.Builder getUserBuilder() {
+      public quest.protocol.CommonMessages.User.Builder getUserBuilder() {
         bitField0_ |= 0x00000002;
         onChanged();
         return getUserFieldBuilder().getBuilder();
       }
-      public quest.protocol.СommonMessages.UserOrBuilder getUserOrBuilder() {
+      public quest.protocol.CommonMessages.UserOrBuilder getUserOrBuilder() {
         if (userBuilder_ != null) {
           return userBuilder_.getMessageOrBuilder();
         } else {
@@ -970,11 +970,11 @@ public final class LoginServerMessage {
         }
       }
       private com.google.protobuf.SingleFieldBuilder<
-          quest.protocol.СommonMessages.User, quest.protocol.СommonMessages.User.Builder, quest.protocol.СommonMessages.UserOrBuilder> 
+          quest.protocol.CommonMessages.User, quest.protocol.CommonMessages.User.Builder, quest.protocol.CommonMessages.UserOrBuilder> 
           getUserFieldBuilder() {
         if (userBuilder_ == null) {
           userBuilder_ = new com.google.protobuf.SingleFieldBuilder<
-              quest.protocol.СommonMessages.User, quest.protocol.СommonMessages.User.Builder, quest.protocol.СommonMessages.UserOrBuilder>(
+              quest.protocol.CommonMessages.User, quest.protocol.CommonMessages.User.Builder, quest.protocol.CommonMessages.UserOrBuilder>(
                   user_,
                   getParentForChildren(),
                   isClean());
@@ -1048,7 +1048,7 @@ public final class LoginServerMessage {
     com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
-          quest.protocol.СommonMessages.getDescriptor(),
+          quest.protocol.CommonMessages.getDescriptor(),
         }, assigner);
   }
   

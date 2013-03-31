@@ -1,5 +1,5 @@
 option java_package = "quest.protocol";
-option java_outer_classname = "СommonMessages";
+option java_outer_classname = "CommonMessages";
 
 //Пользователь
 message User

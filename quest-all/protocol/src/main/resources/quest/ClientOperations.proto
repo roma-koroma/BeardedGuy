@@ -30,5 +30,6 @@ message InputOperation {
         DOWN_KEY = 2;
         LEFT_KEY = 3;
         RIGHT_KEY = 4;
+        NONE = 5;
     }
 }

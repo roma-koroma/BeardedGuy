@@ -3,8 +3,8 @@
 
 package quest.protocol;
 
-public final class СommonMessages {
-  private СommonMessages() {}
+public final class CommonMessages {
+  private CommonMessages() {}
   public static void registerAllExtensions(
       com.google.protobuf.ExtensionRegistry registry) {
   }
@@ -25,8 +25,8 @@ public final class СommonMessages {
     
     // optional .Point position = 4;
     boolean hasPosition();
-    quest.protocol.СommonMessages.Point getPosition();
-    quest.protocol.СommonMessages.PointOrBuilder getPositionOrBuilder();
+    quest.protocol.CommonMessages.Point getPosition();
+    quest.protocol.CommonMessages.PointOrBuilder getPositionOrBuilder();
   }
   public static final class User extends
       com.google.protobuf.GeneratedMessage
@@ -48,12 +48,12 @@ public final class СommonMessages {
     
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return quest.protocol.СommonMessages.internal_static_User_descriptor;
+      return quest.protocol.CommonMessages.internal_static_User_descriptor;
     }
     
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return quest.protocol.СommonMessages.internal_static_User_fieldAccessorTable;
+      return quest.protocol.CommonMessages.internal_static_User_fieldAccessorTable;
     }
     
     private int bitField0_;
@@ -111,14 +111,14 @@ public final class СommonMessages {
     
     // optional .Point position = 4;
     public static final int POSITION_FIELD_NUMBER = 4;
-    private quest.protocol.СommonMessages.Point position_;
+    private quest.protocol.CommonMessages.Point position_;
     public boolean hasPosition() {
       return ((bitField0_ & 0x00000008) == 0x00000008);
     }
-    public quest.protocol.СommonMessages.Point getPosition() {
+    public quest.protocol.CommonMessages.Point getPosition() {
       return position_;
     }
-    public quest.protocol.СommonMessages.PointOrBuilder getPositionOrBuilder() {
+    public quest.protocol.CommonMessages.PointOrBuilder getPositionOrBuilder() {
       return position_;
     }
     
@@ -126,7 +126,7 @@ public final class СommonMessages {
       id_ = 0;
       name_ = "";
       isOnline_ = false;
-      position_ = quest.protocol.СommonMessages.Point.getDefaultInstance();
+      position_ = quest.protocol.CommonMessages.Point.getDefaultInstance();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -207,41 +207,41 @@ public final class СommonMessages {
       return super.writeReplace();
     }
     
-    public static quest.protocol.СommonMessages.User parseFrom(
+    public static quest.protocol.CommonMessages.User parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
-    public static quest.protocol.СommonMessages.User parseFrom(
+    public static quest.protocol.CommonMessages.User parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data, extensionRegistry)
                .buildParsed();
     }
-    public static quest.protocol.СommonMessages.User parseFrom(byte[] data)
+    public static quest.protocol.CommonMessages.User parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
-    public static quest.protocol.СommonMessages.User parseFrom(
+    public static quest.protocol.CommonMessages.User parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data, extensionRegistry)
                .buildParsed();
     }
-    public static quest.protocol.СommonMessages.User parseFrom(java.io.InputStream input)
+    public static quest.protocol.CommonMessages.User parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
-    public static quest.protocol.СommonMessages.User parseFrom(
+    public static quest.protocol.CommonMessages.User parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input, extensionRegistry)
                .buildParsed();
     }
-    public static quest.protocol.СommonMessages.User parseDelimitedFrom(java.io.InputStream input)
+    public static quest.protocol.CommonMessages.User parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       Builder builder = newBuilder();
       if (builder.mergeDelimitedFrom(input)) {
@@ -250,7 +250,7 @@ public final class СommonMessages {
         return null;
       }
     }
-    public static quest.protocol.СommonMessages.User parseDelimitedFrom(
+    public static quest.protocol.CommonMessages.User parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -261,12 +261,12 @@ public final class СommonMessages {
         return null;
       }
     }
-    public static quest.protocol.СommonMessages.User parseFrom(
+    public static quest.protocol.CommonMessages.User parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
-    public static quest.protocol.СommonMessages.User parseFrom(
+    public static quest.protocol.CommonMessages.User parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -276,7 +276,7 @@ public final class СommonMessages {
     
     public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(quest.protocol.СommonMessages.User prototype) {
+    public static Builder newBuilder(quest.protocol.CommonMessages.User prototype) {
       return newBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() { return newBuilder(this); }
@@ -289,18 +289,18 @@ public final class СommonMessages {
     }
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements quest.protocol.СommonMessages.UserOrBuilder {
+       implements quest.protocol.CommonMessages.UserOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return quest.protocol.СommonMessages.internal_static_User_descriptor;
+        return quest.protocol.CommonMessages.internal_static_User_descriptor;
       }
       
       protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return quest.protocol.СommonMessages.internal_static_User_fieldAccessorTable;
+        return quest.protocol.CommonMessages.internal_static_User_fieldAccessorTable;
       }
       
-      // Construct using quest.protocol.СommonMessages.User.newBuilder()
+      // Construct using quest.protocol.CommonMessages.User.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -327,7 +327,7 @@ public final class СommonMessages {
         isOnline_ = false;
         bitField0_ = (bitField0_ & ~0x00000004);
         if (positionBuilder_ == null) {
-          position_ = quest.protocol.СommonMessages.Point.getDefaultInstance();
+          position_ = quest.protocol.CommonMessages.Point.getDefaultInstance();
         } else {
           positionBuilder_.clear();
         }
@@ -341,24 +341,24 @@ public final class СommonMessages {
       
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return quest.protocol.СommonMessages.User.getDescriptor();
+        return quest.protocol.CommonMessages.User.getDescriptor();
       }
       
-      public quest.protocol.СommonMessages.User getDefaultInstanceForType() {
-        return quest.protocol.СommonMessages.User.getDefaultInstance();
+      public quest.protocol.CommonMessages.User getDefaultInstanceForType() {
+        return quest.protocol.CommonMessages.User.getDefaultInstance();
       }
       
-      public quest.protocol.СommonMessages.User build() {
-        quest.protocol.СommonMessages.User result = buildPartial();
+      public quest.protocol.CommonMessages.User build() {
+        quest.protocol.CommonMessages.User result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
       
-      private quest.protocol.СommonMessages.User buildParsed()
+      private quest.protocol.CommonMessages.User buildParsed()
           throws com.google.protobuf.InvalidProtocolBufferException {
-        quest.protocol.СommonMessages.User result = buildPartial();
+        quest.protocol.CommonMessages.User result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(
             result).asInvalidProtocolBufferException();
@@ -366,8 +366,8 @@ public final class СommonMessages {
         return result;
       }
       
-      public quest.protocol.СommonMessages.User buildPartial() {
-        quest.protocol.СommonMessages.User result = new quest.protocol.СommonMessages.User(this);
+      public quest.protocol.CommonMessages.User buildPartial() {
+        quest.protocol.CommonMessages.User result = new quest.protocol.CommonMessages.User(this);
         int from_bitField0_ = bitField0_;
         int to_bitField0_ = 0;
         if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
@@ -396,16 +396,16 @@ public final class СommonMessages {
       }
       
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof quest.protocol.СommonMessages.User) {
-          return mergeFrom((quest.protocol.СommonMessages.User)other);
+        if (other instanceof quest.protocol.CommonMessages.User) {
+          return mergeFrom((quest.protocol.CommonMessages.User)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
       
-      public Builder mergeFrom(quest.protocol.СommonMessages.User other) {
-        if (other == quest.protocol.СommonMessages.User.getDefaultInstance()) return this;
+      public Builder mergeFrom(quest.protocol.CommonMessages.User other) {
+        if (other == quest.protocol.CommonMessages.User.getDefaultInstance()) return this;
         if (other.hasId()) {
           setId(other.getId());
         }
@@ -483,7 +483,7 @@ public final class СommonMessages {
               break;
             }
             case 34: {
-              quest.protocol.СommonMessages.Point.Builder subBuilder = quest.protocol.СommonMessages.Point.newBuilder();
+              quest.protocol.CommonMessages.Point.Builder subBuilder = quest.protocol.CommonMessages.Point.newBuilder();
               if (hasPosition()) {
                 subBuilder.mergeFrom(getPosition());
               }
@@ -576,20 +576,20 @@ public final class СommonMessages {
       }
       
       // optional .Point position = 4;
-      private quest.protocol.СommonMessages.Point position_ = quest.protocol.СommonMessages.Point.getDefaultInstance();
+      private quest.protocol.CommonMessages.Point position_ = quest.protocol.CommonMessages.Point.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
-          quest.protocol.СommonMessages.Point, quest.protocol.СommonMessages.Point.Builder, quest.protocol.СommonMessages.PointOrBuilder> positionBuilder_;
+          quest.protocol.CommonMessages.Point, quest.protocol.CommonMessages.Point.Builder, quest.protocol.CommonMessages.PointOrBuilder> positionBuilder_;
       public boolean hasPosition() {
         return ((bitField0_ & 0x00000008) == 0x00000008);
       }
-      public quest.protocol.СommonMessages.Point getPosition() {
+      public quest.protocol.CommonMessages.Point getPosition() {
         if (positionBuilder_ == null) {
           return position_;
         } else {
           return positionBuilder_.getMessage();
         }
       }
-      public Builder setPosition(quest.protocol.СommonMessages.Point value) {
+      public Builder setPosition(quest.protocol.CommonMessages.Point value) {
         if (positionBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -603,7 +603,7 @@ public final class СommonMessages {
         return this;
       }
       public Builder setPosition(
-          quest.protocol.СommonMessages.Point.Builder builderForValue) {
+          quest.protocol.CommonMessages.Point.Builder builderForValue) {
         if (positionBuilder_ == null) {
           position_ = builderForValue.build();
           onChanged();
@@ -613,12 +613,12 @@ public final class СommonMessages {
         bitField0_ |= 0x00000008;
         return this;
       }
-      public Builder mergePosition(quest.protocol.СommonMessages.Point value) {
+      public Builder mergePosition(quest.protocol.CommonMessages.Point value) {
         if (positionBuilder_ == null) {
           if (((bitField0_ & 0x00000008) == 0x00000008) &&
-              position_ != quest.protocol.СommonMessages.Point.getDefaultInstance()) {
+              position_ != quest.protocol.CommonMessages.Point.getDefaultInstance()) {
             position_ =
-              quest.protocol.СommonMessages.Point.newBuilder(position_).mergeFrom(value).buildPartial();
+              quest.protocol.CommonMessages.Point.newBuilder(position_).mergeFrom(value).buildPartial();
           } else {
             position_ = value;
           }
@@ -631,7 +631,7 @@ public final class СommonMessages {
       }
       public Builder clearPosition() {
         if (positionBuilder_ == null) {
-          position_ = quest.protocol.СommonMessages.Point.getDefaultInstance();
+          position_ = quest.protocol.CommonMessages.Point.getDefaultInstance();
           onChanged();
         } else {
           positionBuilder_.clear();
@@ -639,12 +639,12 @@ public final class СommonMessages {
         bitField0_ = (bitField0_ & ~0x00000008);
         return this;
       }
-      public quest.protocol.СommonMessages.Point.Builder getPositionBuilder() {
+      public quest.protocol.CommonMessages.Point.Builder getPositionBuilder() {
         bitField0_ |= 0x00000008;
         onChanged();
         return getPositionFieldBuilder().getBuilder();
       }
-      public quest.protocol.СommonMessages.PointOrBuilder getPositionOrBuilder() {
+      public quest.protocol.CommonMessages.PointOrBuilder getPositionOrBuilder() {
         if (positionBuilder_ != null) {
           return positionBuilder_.getMessageOrBuilder();
         } else {
@@ -652,11 +652,11 @@ public final class СommonMessages {
         }
       }
       private com.google.protobuf.SingleFieldBuilder<
-          quest.protocol.СommonMessages.Point, quest.protocol.СommonMessages.Point.Builder, quest.protocol.СommonMessages.PointOrBuilder> 
+          quest.protocol.CommonMessages.Point, quest.protocol.CommonMessages.Point.Builder, quest.protocol.CommonMessages.PointOrBuilder> 
           getPositionFieldBuilder() {
         if (positionBuilder_ == null) {
           positionBuilder_ = new com.google.protobuf.SingleFieldBuilder<
-              quest.protocol.СommonMessages.Point, quest.protocol.СommonMessages.Point.Builder, quest.protocol.СommonMessages.PointOrBuilder>(
+              quest.protocol.CommonMessages.Point, quest.protocol.CommonMessages.Point.Builder, quest.protocol.CommonMessages.PointOrBuilder>(
                   position_,
                   getParentForChildren(),
                   isClean());
@@ -707,12 +707,12 @@ public final class СommonMessages {
     
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return quest.protocol.СommonMessages.internal_static_Point_descriptor;
+      return quest.protocol.CommonMessages.internal_static_Point_descriptor;
     }
     
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return quest.protocol.СommonMessages.internal_static_Point_fieldAccessorTable;
+      return quest.protocol.CommonMessages.internal_static_Point_fieldAccessorTable;
     }
     
     private int bitField0_;
@@ -795,41 +795,41 @@ public final class СommonMessages {
       return super.writeReplace();
     }
     
-    public static quest.protocol.СommonMessages.Point parseFrom(
+    public static quest.protocol.CommonMessages.Point parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
-    public static quest.protocol.СommonMessages.Point parseFrom(
+    public static quest.protocol.CommonMessages.Point parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data, extensionRegistry)
                .buildParsed();
     }
-    public static quest.protocol.СommonMessages.Point parseFrom(byte[] data)
+    public static quest.protocol.CommonMessages.Point parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
-    public static quest.protocol.СommonMessages.Point parseFrom(
+    public static quest.protocol.CommonMessages.Point parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data, extensionRegistry)
                .buildParsed();
     }
-    public static quest.protocol.СommonMessages.Point parseFrom(java.io.InputStream input)
+    public static quest.protocol.CommonMessages.Point parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
-    public static quest.protocol.СommonMessages.Point parseFrom(
+    public static quest.protocol.CommonMessages.Point parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input, extensionRegistry)
                .buildParsed();
     }
-    public static quest.protocol.СommonMessages.Point parseDelimitedFrom(java.io.InputStream input)
+    public static quest.protocol.CommonMessages.Point parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       Builder builder = newBuilder();
       if (builder.mergeDelimitedFrom(input)) {
@@ -838,7 +838,7 @@ public final class СommonMessages {
         return null;
       }
     }
-    public static quest.protocol.СommonMessages.Point parseDelimitedFrom(
+    public static quest.protocol.CommonMessages.Point parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -849,12 +849,12 @@ public final class СommonMessages {
         return null;
       }
     }
-    public static quest.protocol.СommonMessages.Point parseFrom(
+    public static quest.protocol.CommonMessages.Point parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
-    public static quest.protocol.СommonMessages.Point parseFrom(
+    public static quest.protocol.CommonMessages.Point parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -864,7 +864,7 @@ public final class СommonMessages {
     
     public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(quest.protocol.СommonMessages.Point prototype) {
+    public static Builder newBuilder(quest.protocol.CommonMessages.Point prototype) {
       return newBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() { return newBuilder(this); }
@@ -877,18 +877,18 @@ public final class СommonMessages {
     }
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements quest.protocol.СommonMessages.PointOrBuilder {
+       implements quest.protocol.CommonMessages.PointOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return quest.protocol.СommonMessages.internal_static_Point_descriptor;
+        return quest.protocol.CommonMessages.internal_static_Point_descriptor;
       }
       
       protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return quest.protocol.СommonMessages.internal_static_Point_fieldAccessorTable;
+        return quest.protocol.CommonMessages.internal_static_Point_fieldAccessorTable;
       }
       
-      // Construct using quest.protocol.СommonMessages.Point.newBuilder()
+      // Construct using quest.protocol.CommonMessages.Point.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -920,24 +920,24 @@ public final class СommonMessages {
       
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return quest.protocol.СommonMessages.Point.getDescriptor();
+        return quest.protocol.CommonMessages.Point.getDescriptor();
       }
       
-      public quest.protocol.СommonMessages.Point getDefaultInstanceForType() {
-        return quest.protocol.СommonMessages.Point.getDefaultInstance();
+      public quest.protocol.CommonMessages.Point getDefaultInstanceForType() {
+        return quest.protocol.CommonMessages.Point.getDefaultInstance();
       }
       
-      public quest.protocol.СommonMessages.Point build() {
-        quest.protocol.СommonMessages.Point result = buildPartial();
+      public quest.protocol.CommonMessages.Point build() {
+        quest.protocol.CommonMessages.Point result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
       
-      private quest.protocol.СommonMessages.Point buildParsed()
+      private quest.protocol.CommonMessages.Point buildParsed()
           throws com.google.protobuf.InvalidProtocolBufferException {
-        quest.protocol.СommonMessages.Point result = buildPartial();
+        quest.protocol.CommonMessages.Point result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(
             result).asInvalidProtocolBufferException();
@@ -945,8 +945,8 @@ public final class СommonMessages {
         return result;
       }
       
-      public quest.protocol.СommonMessages.Point buildPartial() {
-        quest.protocol.СommonMessages.Point result = new quest.protocol.СommonMessages.Point(this);
+      public quest.protocol.CommonMessages.Point buildPartial() {
+        quest.protocol.CommonMessages.Point result = new quest.protocol.CommonMessages.Point(this);
         int from_bitField0_ = bitField0_;
         int to_bitField0_ = 0;
         if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
@@ -963,16 +963,16 @@ public final class СommonMessages {
       }
       
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof quest.protocol.СommonMessages.Point) {
-          return mergeFrom((quest.protocol.СommonMessages.Point)other);
+        if (other instanceof quest.protocol.CommonMessages.Point) {
+          return mergeFrom((quest.protocol.CommonMessages.Point)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
       
-      public Builder mergeFrom(quest.protocol.СommonMessages.Point other) {
-        if (other == quest.protocol.СommonMessages.Point.getDefaultInstance()) return this;
+      public Builder mergeFrom(quest.protocol.CommonMessages.Point other) {
+        if (other == quest.protocol.CommonMessages.Point.getDefaultInstance()) return this;
         if (other.hasX()) {
           setX(other.getX());
         }
@@ -1126,12 +1126,12 @@ public final class СommonMessages {
     
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return quest.protocol.СommonMessages.internal_static_Shard_descriptor;
+      return quest.protocol.CommonMessages.internal_static_Shard_descriptor;
     }
     
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return quest.protocol.СommonMessages.internal_static_Shard_fieldAccessorTable;
+      return quest.protocol.CommonMessages.internal_static_Shard_fieldAccessorTable;
     }
     
     private int bitField0_;
@@ -1290,41 +1290,41 @@ public final class СommonMessages {
       return super.writeReplace();
     }
     
-    public static quest.protocol.СommonMessages.Shard parseFrom(
+    public static quest.protocol.CommonMessages.Shard parseFrom(
         com.google.protobuf.ByteString data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
-    public static quest.protocol.СommonMessages.Shard parseFrom(
+    public static quest.protocol.CommonMessages.Shard parseFrom(
         com.google.protobuf.ByteString data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data, extensionRegistry)
                .buildParsed();
     }
-    public static quest.protocol.СommonMessages.Shard parseFrom(byte[] data)
+    public static quest.protocol.CommonMessages.Shard parseFrom(byte[] data)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data).buildParsed();
     }
-    public static quest.protocol.СommonMessages.Shard parseFrom(
+    public static quest.protocol.CommonMessages.Shard parseFrom(
         byte[] data,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws com.google.protobuf.InvalidProtocolBufferException {
       return newBuilder().mergeFrom(data, extensionRegistry)
                .buildParsed();
     }
-    public static quest.protocol.СommonMessages.Shard parseFrom(java.io.InputStream input)
+    public static quest.protocol.CommonMessages.Shard parseFrom(java.io.InputStream input)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
-    public static quest.protocol.СommonMessages.Shard parseFrom(
+    public static quest.protocol.CommonMessages.Shard parseFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input, extensionRegistry)
                .buildParsed();
     }
-    public static quest.protocol.СommonMessages.Shard parseDelimitedFrom(java.io.InputStream input)
+    public static quest.protocol.CommonMessages.Shard parseDelimitedFrom(java.io.InputStream input)
         throws java.io.IOException {
       Builder builder = newBuilder();
       if (builder.mergeDelimitedFrom(input)) {
@@ -1333,7 +1333,7 @@ public final class СommonMessages {
         return null;
       }
     }
-    public static quest.protocol.СommonMessages.Shard parseDelimitedFrom(
+    public static quest.protocol.CommonMessages.Shard parseDelimitedFrom(
         java.io.InputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -1344,12 +1344,12 @@ public final class СommonMessages {
         return null;
       }
     }
-    public static quest.protocol.СommonMessages.Shard parseFrom(
+    public static quest.protocol.CommonMessages.Shard parseFrom(
         com.google.protobuf.CodedInputStream input)
         throws java.io.IOException {
       return newBuilder().mergeFrom(input).buildParsed();
     }
-    public static quest.protocol.СommonMessages.Shard parseFrom(
+    public static quest.protocol.CommonMessages.Shard parseFrom(
         com.google.protobuf.CodedInputStream input,
         com.google.protobuf.ExtensionRegistryLite extensionRegistry)
         throws java.io.IOException {
@@ -1359,7 +1359,7 @@ public final class СommonMessages {
     
     public static Builder newBuilder() { return Builder.create(); }
     public Builder newBuilderForType() { return newBuilder(); }
-    public static Builder newBuilder(quest.protocol.СommonMessages.Shard prototype) {
+    public static Builder newBuilder(quest.protocol.CommonMessages.Shard prototype) {
       return newBuilder().mergeFrom(prototype);
     }
     public Builder toBuilder() { return newBuilder(this); }
@@ -1372,18 +1372,18 @@ public final class СommonMessages {
     }
     public static final class Builder extends
         com.google.protobuf.GeneratedMessage.Builder<Builder>
-       implements quest.protocol.СommonMessages.ShardOrBuilder {
+       implements quest.protocol.CommonMessages.ShardOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return quest.protocol.СommonMessages.internal_static_Shard_descriptor;
+        return quest.protocol.CommonMessages.internal_static_Shard_descriptor;
       }
       
       protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return quest.protocol.СommonMessages.internal_static_Shard_fieldAccessorTable;
+        return quest.protocol.CommonMessages.internal_static_Shard_fieldAccessorTable;
       }
       
-      // Construct using quest.protocol.СommonMessages.Shard.newBuilder()
+      // Construct using quest.protocol.CommonMessages.Shard.newBuilder()
       private Builder() {
         maybeForceBuilderInitialization();
       }
@@ -1419,24 +1419,24 @@ public final class СommonMessages {
       
       public com.google.protobuf.Descriptors.Descriptor
           getDescriptorForType() {
-        return quest.protocol.СommonMessages.Shard.getDescriptor();
+        return quest.protocol.CommonMessages.Shard.getDescriptor();
       }
       
-      public quest.protocol.СommonMessages.Shard getDefaultInstanceForType() {
-        return quest.protocol.СommonMessages.Shard.getDefaultInstance();
+      public quest.protocol.CommonMessages.Shard getDefaultInstanceForType() {
+        return quest.protocol.CommonMessages.Shard.getDefaultInstance();
       }
       
-      public quest.protocol.СommonMessages.Shard build() {
-        quest.protocol.СommonMessages.Shard result = buildPartial();
+      public quest.protocol.CommonMessages.Shard build() {
+        quest.protocol.CommonMessages.Shard result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(result);
         }
         return result;
       }
       
-      private quest.protocol.СommonMessages.Shard buildParsed()
+      private quest.protocol.CommonMessages.Shard buildParsed()
           throws com.google.protobuf.InvalidProtocolBufferException {
-        quest.protocol.СommonMessages.Shard result = buildPartial();
+        quest.protocol.CommonMessages.Shard result = buildPartial();
         if (!result.isInitialized()) {
           throw newUninitializedMessageException(
             result).asInvalidProtocolBufferException();
@@ -1444,8 +1444,8 @@ public final class СommonMessages {
         return result;
       }
       
-      public quest.protocol.СommonMessages.Shard buildPartial() {
-        quest.protocol.СommonMessages.Shard result = new quest.protocol.СommonMessages.Shard(this);
+      public quest.protocol.CommonMessages.Shard buildPartial() {
+        quest.protocol.CommonMessages.Shard result = new quest.protocol.CommonMessages.Shard(this);
         int from_bitField0_ = bitField0_;
         int to_bitField0_ = 0;
         if (((from_bitField0_ & 0x00000001) == 0x00000001)) {
@@ -1470,16 +1470,16 @@ public final class СommonMessages {
       }
       
       public Builder mergeFrom(com.google.protobuf.Message other) {
-        if (other instanceof quest.protocol.СommonMessages.Shard) {
-          return mergeFrom((quest.protocol.СommonMessages.Shard)other);
+        if (other instanceof quest.protocol.CommonMessages.Shard) {
+          return mergeFrom((quest.protocol.CommonMessages.Shard)other);
         } else {
           super.mergeFrom(other);
           return this;
         }
       }
       
-      public Builder mergeFrom(quest.protocol.СommonMessages.Shard other) {
-        if (other == quest.protocol.СommonMessages.Shard.getDefaultInstance()) return this;
+      public Builder mergeFrom(quest.protocol.CommonMessages.Shard other) {
+        if (other == quest.protocol.CommonMessages.Shard.getDefaultInstance()) return this;
         if (other.hasIp()) {
           setIp(other.getIp());
         }
@@ -1707,8 +1707,8 @@ public final class СommonMessages {
       "nline\030\003 \002(\010\022\030\n\010position\030\004 \001(\0132\006.Point\"\035\n" +
       "\005Point\022\t\n\001x\030\001 \002(\005\022\t\n\001y\030\002 \002(\005\"E\n\005Shard\022\n\n" +
       "\002ip\030\001 \001(\t\022\014\n\004port\030\002 \002(\r\022\014\n\004name\030\003 \001(\t\022\024\n" +
-      "\014playersCount\030\004 \001(\rB!\n\016quest.protocolB\017\320" +
-      "\241ommonMessages"
+      "\014playersCount\030\004 \001(\rB \n\016quest.protocolB\016C" +
+      "ommonMessages"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
@@ -1721,24 +1721,24 @@ public final class СommonMessages {
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_User_descriptor,
               new java.lang.String[] { "Id", "Name", "IsOnline", "Position", },
-              quest.protocol.СommonMessages.User.class,
-              quest.protocol.СommonMessages.User.Builder.class);
+              quest.protocol.CommonMessages.User.class,
+              quest.protocol.CommonMessages.User.Builder.class);
           internal_static_Point_descriptor =
             getDescriptor().getMessageTypes().get(1);
           internal_static_Point_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_Point_descriptor,
               new java.lang.String[] { "X", "Y", },
-              quest.protocol.СommonMessages.Point.class,
-              quest.protocol.СommonMessages.Point.Builder.class);
+              quest.protocol.CommonMessages.Point.class,
+              quest.protocol.CommonMessages.Point.Builder.class);
           internal_static_Shard_descriptor =
             getDescriptor().getMessageTypes().get(2);
           internal_static_Shard_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
               internal_static_Shard_descriptor,
               new java.lang.String[] { "Ip", "Port", "Name", "PlayersCount", },
-              quest.protocol.СommonMessages.Shard.class,
-              quest.protocol.СommonMessages.Shard.Builder.class);
+              quest.protocol.CommonMessages.Shard.class,
+              quest.protocol.CommonMessages.Shard.Builder.class);
           return null;
         }
       };

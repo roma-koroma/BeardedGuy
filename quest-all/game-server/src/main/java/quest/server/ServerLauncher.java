@@ -1,7 +1,12 @@
 package quest.server;
 
+import com.google.protobuf.ByteString;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import quest.client.model.BeardedGuy;
+import quest.client.model.Point;
+import quest.protocol.CommonMessages;
+import quest.protocol.LoginServerMessage;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -23,13 +28,14 @@ public class ServerLauncher
      */
     private static final Logger logger = LoggerFactory.getLogger(ServerLauncher.class);
 
-    public static final int BUFFER_SIZE = 1024;
+    public static final int BUFFER_SIZE = 256;
 
     ByteBuffer buffer = ByteBuffer.allocate(BUFFER_SIZE);
 
     UserController userController;
+	private boolean isCreated = false;
 
-    public ServerLauncher() throws IOException, InterruptedException
+	public ServerLauncher() throws IOException, InterruptedException
     {
         ServerSocketChannel ssc = configure();
 
@@ -82,14 +88,56 @@ public class ServerLauncher
 
     private void read(SelectionKey key) throws IOException
     {
-        buffer.clear();
-        SocketChannel ch = (SocketChannel) key.channel();
+		SocketChannel ch = (SocketChannel) key.channel();
+		buffer.clear();
         ch.read(buffer);
-        logger.info("read {}", buffer.getInt(0));
-//        key.interestOps(SelectionKey.OP_WRITE);
-    }
+		if(!isCreated)
+		{
+			int size = buffer.getInt(0);
+			LoginServerMessage.AuthOperation auth =
+				LoginServerMessage.AuthOperation
+					.parseFrom(ByteString.copyFrom(buffer.array(), 4, size));
+			logger.info("login:{}, password:{}", auth.getLogin(), auth.getPassword());
 
-    private void write(SelectionKey key) throws IOException
+			BeardedGuy guy = new BeardedGuy(auth.getLogin().toUpperCase(), new Point(0, 0));
+			guy.setId(1);
+
+			byte[] result = LoginServerMessage.AuthOperationResult.newBuilder()
+				.setIsSuccess(true)
+				.setUser(serializeGuy(guy))
+				.build().toByteArray();
+
+			buffer.clear();
+			buffer.putInt(0, result.length);
+			buffer.position(4);
+			buffer.put(result);
+			buffer.position(0);
+			ch.write(buffer);
+
+			isCreated = true;
+		}
+		// key.interestOps(SelectionKey.OP_WRITE);
+
+	}
+
+	private CommonMessages.User serializeGuy(BeardedGuy guy)
+	{
+		return CommonMessages.User.newBuilder()
+			.setId(guy.getId())
+			.setIsOnline(true)
+			.setName(guy.getName())
+			.setPosition(serializePoint(guy.getPosition()))
+			.build();
+	}
+
+	private CommonMessages.Point serializePoint(Point position)
+	{
+		return CommonMessages.Point.newBuilder()
+			.setX(position.getX())
+			.setY(position.getY()).build();
+	}
+
+	private void write(SelectionKey key) throws IOException
     {
 //        SocketChannel ch = (SocketChannel) key.channel();
 //        buffer.clear();

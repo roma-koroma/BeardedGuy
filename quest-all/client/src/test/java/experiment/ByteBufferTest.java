@@ -28,6 +28,7 @@ public class ByteBufferTest
         bbuf.clear();
 
         bbuf.putInt(1, 2);
+		int rem = bbuf.remaining();
         bbuf.get(0); // 0
         bbuf.get(1); // 123
 

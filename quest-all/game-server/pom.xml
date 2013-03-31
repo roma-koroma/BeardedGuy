@@ -14,11 +14,17 @@
 
     <dependencies>
 
-        <!--<dependency>-->
-        <!--<groupId>protopad</groupId>-->
-        <!--<artifactId>database</artifactId>-->
-        <!--<version>1.0</version>-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>quest</groupId>
+            <artifactId>protocol</artifactId>
+            <version>1.0</version>
+        </dependency>
+
+        <dependency>
+            <groupId>quest</groupId>
+            <artifactId>client</artifactId>
+            <version>1.0</version>
+        </dependency>
 
         <!-- Тестирование -->
         <dependency>
@@ -31,11 +37,6 @@
             <artifactId>mockito-all</artifactId>
         </dependency>
 
-        <!--<dependency>-->
-        <!--<groupId>protopad</groupId>-->
-        <!--<artifactId>game-protocol</artifactId>-->
-        <!--<version>1.0</version>-->
-        <!--</dependency>-->
 
         <!-- Логирование-->
         <dependency>

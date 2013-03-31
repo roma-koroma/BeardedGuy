@@ -501,13 +501,13 @@ public final class GameServerMessage {
       extends com.google.protobuf.MessageOrBuilder {
     
     // repeated .User user = 1;
-    java.util.List<quest.protocol.СommonMessages.User> 
+    java.util.List<quest.protocol.CommonMessages.User> 
         getUserList();
-    quest.protocol.СommonMessages.User getUser(int index);
+    quest.protocol.CommonMessages.User getUser(int index);
     int getUserCount();
-    java.util.List<? extends quest.protocol.СommonMessages.UserOrBuilder> 
+    java.util.List<? extends quest.protocol.CommonMessages.UserOrBuilder> 
         getUserOrBuilderList();
-    quest.protocol.СommonMessages.UserOrBuilder getUserOrBuilder(
+    quest.protocol.CommonMessages.UserOrBuilder getUserOrBuilder(
         int index);
   }
   public static final class GameStateOperation extends
@@ -540,21 +540,21 @@ public final class GameServerMessage {
     
     // repeated .User user = 1;
     public static final int USER_FIELD_NUMBER = 1;
-    private java.util.List<quest.protocol.СommonMessages.User> user_;
-    public java.util.List<quest.protocol.СommonMessages.User> getUserList() {
+    private java.util.List<quest.protocol.CommonMessages.User> user_;
+    public java.util.List<quest.protocol.CommonMessages.User> getUserList() {
       return user_;
     }
-    public java.util.List<? extends quest.protocol.СommonMessages.UserOrBuilder> 
+    public java.util.List<? extends quest.protocol.CommonMessages.UserOrBuilder> 
         getUserOrBuilderList() {
       return user_;
     }
     public int getUserCount() {
       return user_.size();
     }
-    public quest.protocol.СommonMessages.User getUser(int index) {
+    public quest.protocol.CommonMessages.User getUser(int index) {
       return user_.get(index);
     }
-    public quest.protocol.СommonMessages.UserOrBuilder getUserOrBuilder(
+    public quest.protocol.CommonMessages.UserOrBuilder getUserOrBuilder(
         int index) {
       return user_.get(index);
     }
@@ -852,7 +852,7 @@ public final class GameServerMessage {
               break;
             }
             case 10: {
-              quest.protocol.СommonMessages.User.Builder subBuilder = quest.protocol.СommonMessages.User.newBuilder();
+              quest.protocol.CommonMessages.User.Builder subBuilder = quest.protocol.CommonMessages.User.newBuilder();
               input.readMessage(subBuilder, extensionRegistry);
               addUser(subBuilder.buildPartial());
               break;
@@ -864,19 +864,19 @@ public final class GameServerMessage {
       private int bitField0_;
       
       // repeated .User user = 1;
-      private java.util.List<quest.protocol.СommonMessages.User> user_ =
+      private java.util.List<quest.protocol.CommonMessages.User> user_ =
         java.util.Collections.emptyList();
       private void ensureUserIsMutable() {
         if (!((bitField0_ & 0x00000001) == 0x00000001)) {
-          user_ = new java.util.ArrayList<quest.protocol.СommonMessages.User>(user_);
+          user_ = new java.util.ArrayList<quest.protocol.CommonMessages.User>(user_);
           bitField0_ |= 0x00000001;
          }
       }
       
       private com.google.protobuf.RepeatedFieldBuilder<
-          quest.protocol.СommonMessages.User, quest.protocol.СommonMessages.User.Builder, quest.protocol.СommonMessages.UserOrBuilder> userBuilder_;
+          quest.protocol.CommonMessages.User, quest.protocol.CommonMessages.User.Builder, quest.protocol.CommonMessages.UserOrBuilder> userBuilder_;
       
-      public java.util.List<quest.protocol.СommonMessages.User> getUserList() {
+      public java.util.List<quest.protocol.CommonMessages.User> getUserList() {
         if (userBuilder_ == null) {
           return java.util.Collections.unmodifiableList(user_);
         } else {
@@ -890,7 +890,7 @@ public final class GameServerMessage {
           return userBuilder_.getCount();
         }
       }
-      public quest.protocol.СommonMessages.User getUser(int index) {
+      public quest.protocol.CommonMessages.User getUser(int index) {
         if (userBuilder_ == null) {
           return user_.get(index);
         } else {
@@ -898,7 +898,7 @@ public final class GameServerMessage {
         }
       }
       public Builder setUser(
-          int index, quest.protocol.СommonMessages.User value) {
+          int index, quest.protocol.CommonMessages.User value) {
         if (userBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -912,7 +912,7 @@ public final class GameServerMessage {
         return this;
       }
       public Builder setUser(
-          int index, quest.protocol.СommonMessages.User.Builder builderForValue) {
+          int index, quest.protocol.CommonMessages.User.Builder builderForValue) {
         if (userBuilder_ == null) {
           ensureUserIsMutable();
           user_.set(index, builderForValue.build());
@@ -922,7 +922,7 @@ public final class GameServerMessage {
         }
         return this;
       }
-      public Builder addUser(quest.protocol.СommonMessages.User value) {
+      public Builder addUser(quest.protocol.CommonMessages.User value) {
         if (userBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -936,7 +936,7 @@ public final class GameServerMessage {
         return this;
       }
       public Builder addUser(
-          int index, quest.protocol.СommonMessages.User value) {
+          int index, quest.protocol.CommonMessages.User value) {
         if (userBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -950,7 +950,7 @@ public final class GameServerMessage {
         return this;
       }
       public Builder addUser(
-          quest.protocol.СommonMessages.User.Builder builderForValue) {
+          quest.protocol.CommonMessages.User.Builder builderForValue) {
         if (userBuilder_ == null) {
           ensureUserIsMutable();
           user_.add(builderForValue.build());
@@ -961,7 +961,7 @@ public final class GameServerMessage {
         return this;
       }
       public Builder addUser(
-          int index, quest.protocol.СommonMessages.User.Builder builderForValue) {
+          int index, quest.protocol.CommonMessages.User.Builder builderForValue) {
         if (userBuilder_ == null) {
           ensureUserIsMutable();
           user_.add(index, builderForValue.build());
@@ -972,7 +972,7 @@ public final class GameServerMessage {
         return this;
       }
       public Builder addAllUser(
-          java.lang.Iterable<? extends quest.protocol.СommonMessages.User> values) {
+          java.lang.Iterable<? extends quest.protocol.CommonMessages.User> values) {
         if (userBuilder_ == null) {
           ensureUserIsMutable();
           super.addAll(values, user_);
@@ -1002,18 +1002,18 @@ public final class GameServerMessage {
         }
         return this;
       }
-      public quest.protocol.СommonMessages.User.Builder getUserBuilder(
+      public quest.protocol.CommonMessages.User.Builder getUserBuilder(
           int index) {
         return getUserFieldBuilder().getBuilder(index);
       }
-      public quest.protocol.СommonMessages.UserOrBuilder getUserOrBuilder(
+      public quest.protocol.CommonMessages.UserOrBuilder getUserOrBuilder(
           int index) {
         if (userBuilder_ == null) {
           return user_.get(index);  } else {
           return userBuilder_.getMessageOrBuilder(index);
         }
       }
-      public java.util.List<? extends quest.protocol.СommonMessages.UserOrBuilder> 
+      public java.util.List<? extends quest.protocol.CommonMessages.UserOrBuilder> 
            getUserOrBuilderList() {
         if (userBuilder_ != null) {
           return userBuilder_.getMessageOrBuilderList();
@@ -1021,25 +1021,25 @@ public final class GameServerMessage {
           return java.util.Collections.unmodifiableList(user_);
         }
       }
-      public quest.protocol.СommonMessages.User.Builder addUserBuilder() {
+      public quest.protocol.CommonMessages.User.Builder addUserBuilder() {
         return getUserFieldBuilder().addBuilder(
-            quest.protocol.СommonMessages.User.getDefaultInstance());
+            quest.protocol.CommonMessages.User.getDefaultInstance());
       }
-      public quest.protocol.СommonMessages.User.Builder addUserBuilder(
+      public quest.protocol.CommonMessages.User.Builder addUserBuilder(
           int index) {
         return getUserFieldBuilder().addBuilder(
-            index, quest.protocol.СommonMessages.User.getDefaultInstance());
+            index, quest.protocol.CommonMessages.User.getDefaultInstance());
       }
-      public java.util.List<quest.protocol.СommonMessages.User.Builder> 
+      public java.util.List<quest.protocol.CommonMessages.User.Builder> 
            getUserBuilderList() {
         return getUserFieldBuilder().getBuilderList();
       }
       private com.google.protobuf.RepeatedFieldBuilder<
-          quest.protocol.СommonMessages.User, quest.protocol.СommonMessages.User.Builder, quest.protocol.СommonMessages.UserOrBuilder> 
+          quest.protocol.CommonMessages.User, quest.protocol.CommonMessages.User.Builder, quest.protocol.CommonMessages.UserOrBuilder> 
           getUserFieldBuilder() {
         if (userBuilder_ == null) {
           userBuilder_ = new com.google.protobuf.RepeatedFieldBuilder<
-              quest.protocol.СommonMessages.User, quest.protocol.СommonMessages.User.Builder, quest.protocol.СommonMessages.UserOrBuilder>(
+              quest.protocol.CommonMessages.User, quest.protocol.CommonMessages.User.Builder, quest.protocol.CommonMessages.UserOrBuilder>(
                   user_,
                   ((bitField0_ & 0x00000001) == 0x00000001),
                   getParentForChildren(),
@@ -1115,7 +1115,7 @@ public final class GameServerMessage {
     com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
-          quest.protocol.СommonMessages.getDescriptor(),
+          quest.protocol.CommonMessages.getDescriptor(),
         }, assigner);
   }
   
