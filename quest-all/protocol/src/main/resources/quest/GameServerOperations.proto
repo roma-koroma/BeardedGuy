@@ -1,0 +1,27 @@
+/**
+ * @author Roman Koretskiy
+ * @since 
+ */
+package quest;
+
+option java_package = "quest.protocol";
+option java_outer_classname = "GameServerMessage";
+
+import "src/main/resources/quest/Common.proto";
+
+
+message GameServerOperation
+{
+    required Type operation = 1;
+    required bytes bodyMessage = 2;
+
+    enum Type
+    {
+        DELTA = 1;
+    }
+}
+
+message GameStateOperation
+{
+    repeated User user = 1;
+}

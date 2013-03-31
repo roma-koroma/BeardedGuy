@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>quest</groupId>
+        <artifactId>quest-all</artifactId>
+        <version>1.0</version>
+    </parent>
+
+    <artifactId>protocol</artifactId>
+
+    <properties>
+        <src.dir>src/main/resources/quest</src.dir>
+        <common.proto.file>Common.proto</common.proto.file>
+        <client.proto.file>ClientOperations.proto</client.proto.file>
+        <game.proto.file>GameServerOperations.proto</game.proto.file>
+        <login.proto.file>LoginServerOperations.proto</login.proto.file>
+        <out.dir>src/main/java</out.dir>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.google.protobuf</groupId>
+            <artifactId>protobuf-java</artifactId>
+            <version>2.4.1</version>
+        </dependency>
+
+
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>generate-sources</id>
+                        <phase>generate-sources</phase>
+                        <configuration>
+                            <tasks>
+                                <delete dir="${out.dir}/*"/>
+                                <exec failonerror="true" executable="/usr/local/bin/protoc">
+                                    <arg value="${src.dir}/${common.proto.file}"/>
+                                    <arg value="${src.dir}/${client.proto.file}"/>
+                                    <arg value="${src.dir}/${login.proto.file}"/>
+                                    <arg value="${src.dir}/${game.proto.file}"/>
+
+                                    <arg value="--java_out=${out.dir}"/>
+                                </exec>
+                            </tasks>
+                            <sourceRoot>${out.dir}</sourceRoot>
+                        </configuration>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

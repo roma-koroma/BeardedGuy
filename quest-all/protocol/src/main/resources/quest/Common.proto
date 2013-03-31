@@ -1,0 +1,25 @@
+option java_package = "quest.protocol";
+option java_outer_classname = "СommonMessages";
+
+//Пользователь
+message User
+{
+    required uint32 id = 1;
+    required string name = 2;
+    required bool isOnline = 3;
+    optional Point position = 4;
+}
+
+message Point
+{
+    required int32 x = 1;
+    required int32 y = 2;
+}
+
+message Shard
+{
+    optional string ip = 1;
+    required uint32 port = 2;
+    optional string name = 3;
+    optional uint32 playersCount = 4;
+}

@@ -1,0 +1,8 @@
+/**
+ * User: Roman Koretskiy
+ * Date: 31.03.13
+ * Time: 11:48
+ */
+package quest;
+option java_package="quest";
+

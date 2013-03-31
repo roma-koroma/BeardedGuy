@@ -1,0 +1,34 @@
+/**
+ * @author Roman Koretskiy
+ * @since 
+ */
+package quest;
+
+option java_package = "quest.protocol";
+option java_outer_classname = "ClientMessage";
+
+import "src/main/resources/quest/Common.proto";
+
+//правильнее было бы выделить ветку /game/{client, server}
+message ClientOperation
+{
+    required Type operation = 1;
+    required uint32 clientId = 2;
+    optional bytes bodyMessage = 3;
+
+    enum Type
+    {
+        INPUT = 1;
+    }
+}
+
+message InputOperation {
+    repeated Input input = 1;
+
+    enum Input {
+        UP_KEY = 1;
+        DOWN_KEY = 2;
+        LEFT_KEY = 3;
+        RIGHT_KEY = 4;
+    }
+}
