@@ -16,6 +16,7 @@ import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -115,8 +116,9 @@ public class ServerLauncher
 			ch.write(buffer);
 
 			isCreated = true;
+			key.interestOps(SelectionKey.OP_READ | SelectionKey.OP_WRITE);
+
 		}
-		// key.interestOps(SelectionKey.OP_WRITE);
 
 	}
 
@@ -142,9 +144,10 @@ public class ServerLauncher
 //        SocketChannel ch = (SocketChannel) key.channel();
 //        buffer.clear();
 //        ch.write(Charset.forName("US-ASCII").newEncoder().encode(CharBuffer.wrap("Hello!")));
-        logger.info("i don't wont write");
-        key.interestOps(SelectionKey.OP_READ);
+//        List<Events> events = getEventsForKey(key);
 
+
+//		key.interestOps(SelectionKey.OP_READ);
     }
 
     public static void main(String...args) throws IOException, InterruptedException

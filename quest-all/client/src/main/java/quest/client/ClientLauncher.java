@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import quest.client.model.BeardedGuy;
 import quest.client.model.Point;
 import quest.client.model.RandomInputSource;
+import quest.client.network.DeltaHandler;import quest.client.network.Handler;
 import quest.protocol.ClientMessage;
 import quest.protocol.GameServerMessage;
 import quest.protocol.LoginServerMessage;
@@ -44,16 +45,21 @@ public class ClientLauncher
 	/**
 	 * Очередь, в которую пишутся все события ввода.
 	 */
-	private Deque<RandomInputSource.Event> events;
+	private Deque<RandomInputSource.Event> inputEvents;
+
+	private Map<GameServerMessage.GameServerOperation.Type, Handler> operationRegistry;
+
 
 	public ClientLauncher() throws IOException, InterruptedException
     {
-		events = new ArrayDeque<RandomInputSource.Event>();
+		initRegistry();
+
+
+		inputEvents = new ArrayDeque<RandomInputSource.Event>();
 
         SocketChannel channel = connect();
 
         Selector selector = Selector.open();
-//        SelectionKey k = channel.register(selector, SelectionKey.OP_READ| SelectionKey.OP_WRITE | SelectionKey.OP_CONNECT);
         SelectionKey k = channel.register(selector, SelectionKey.OP_CONNECT);
 
         RandomInputSource source = new RandomInputSource();
@@ -66,11 +72,12 @@ public class ClientLauncher
                 source.tick();
 				for( RandomInputSource.Event event : source.getEvents())
 				{
-					events.addFirst(event);
+					inputEvents.addFirst(event);
 				}
 
                 Set<SelectionKey> readyKeys = selector.selectedKeys();
-                Iterator<SelectionKey> iter = readyKeys.iterator();
+
+				Iterator<SelectionKey> iter = readyKeys.iterator();
 
                 SelectionKey key;
                 while (iter.hasNext())
@@ -91,7 +98,13 @@ public class ClientLauncher
         }
     }
 
-    private void write(SelectionKey key) throws IOException
+	private void initRegistry()
+	{
+		this.operationRegistry = new EnumMap<GameServerMessage.GameServerOperation.Type, Handler>(GameServerMessage.GameServerOperation.Type.class);
+		operationRegistry.put(GameServerMessage.GameServerOperation.Type.DELTA, new DeltaHandler());
+	}
+
+ 	private void write(SelectionKey key) throws IOException
     {
         SocketChannel ch = (SocketChannel) key.channel();
 
@@ -135,9 +148,9 @@ public class ClientLauncher
 
 		ClientMessage.InputOperation.Builder builder = ClientMessage.InputOperation.newBuilder();
 
-		while(events.size() > 0)
+		while(inputEvents.size() > 0)
 		{
-			RandomInputSource.Event event = events.removeLast();
+			RandomInputSource.Event event = inputEvents.removeLast();
 			ClientMessage.InputOperation.Input input;
 			switch (event)
 			{
@@ -164,15 +177,6 @@ public class ClientLauncher
 
 	private void read(SelectionKey key) throws IOException
     {
-		/**
-
-		 GameFlow flow  = new GameFlow();
-		 flow.addGuy(guy);
-		 while(true)
-		 {
-		 flow.tick();
-		 }
-		 */
 		SocketChannel ch = (SocketChannel) key.channel();
 		readBuffer.clear();
 		ch.read(readBuffer);
@@ -185,7 +189,7 @@ public class ClientLauncher
 				LoginServerMessage
 					.AuthOperationResult
 					.parseFrom(
-					ByteString.copyFrom(readBuffer.array(), 4, size));
+						ByteString.copyFrom(readBuffer.array(), 4, size));
 			if(result.getIsSuccess())
 			{
 				guy = new BeardedGuy(
@@ -196,10 +200,24 @@ public class ClientLauncher
 					)
 				);
 				guy.setId(result.getUser().getId());
+				key.interestOps(SelectionKey.OP_WRITE | SelectionKey.OP_WRITE );
+
+			}
+		}
+		else
+		{
+			int size = readBuffer.getInt(0);
+
+			//read cooridantes;
+			GameServerMessage.GameServerOperation op = GameServerMessage.GameServerOperation
+				.parseFrom(ByteString.copyFrom(readBuffer.array(), 4, size));
+			Handler handler = operationRegistry.get(op.getOperation());
+			if(op.getOperation() == GameServerMessage.GameServerOperation.Type.DELTA)
+			{
+				handler.handle(op.getBodyMessage());
 			}
 		}
 
-        key.interestOps(SelectionKey.OP_WRITE);
     }
 
     private void finishConnect(SelectionKey key) throws IOException
