@@ -70,7 +70,7 @@ public class ServerLauncher
         logger.info("Waiting for connections...");
         while (true)
         {
-            while (acceptKey.selector().select() > 0)
+            while (selector.select() > 0)
             {
                 Set<SelectionKey> readyKeys = selector.selectedKeys();
                 Iterator<SelectionKey> iter = readyKeys.iterator();
@@ -79,17 +79,17 @@ public class ServerLauncher
                     key = iter.next();
                     iter.remove();
 
-					if(post.hasMessages(keyToId.get(key)))
-					{
-						key.interestOps(SelectionKey.OP_WRITE);
-					}
-
                     if (key.isAcceptable())
                         accept(key, selector);
                     if (key.isReadable())
                         read(key);
                     if (key.isWritable())
                         write(key);
+
+					if (post.hasMessages(keyToId.get(key)))
+					{
+						key.interestOps(SelectionKey.OP_WRITE);
+					}
                     Thread.sleep(500);
                 }
 
@@ -164,7 +164,7 @@ public class ServerLauncher
 			buffer.position(0);
 			ch.write(buffer);
 
-			key.interestOps(SelectionKey.OP_READ | SelectionKey.OP_WRITE);
+			key.interestOps(SelectionKey.OP_READ);
 		}
 		else
 		{
@@ -177,9 +177,6 @@ public class ServerLauncher
 				handler.handle(op.getClientId(), op.getBodyMessage(), post);
 			}
 		}
-
-		logger.info("Read block {}", key.interestOps());
-
 
 	}
 
@@ -204,11 +201,10 @@ public class ServerLauncher
 			buffer.position(0);
 			ch.write(buffer);
 
+			//TODO здесь может быть проблема при большом потоке других пишущих клиентов.
 			if(!post.hasMessages(id))
 				key.interestOps(SelectionKey.OP_READ);
 		}
-
-		logger.info("Write block {}", key.interestOps());
 
 	}
 
@@ -218,7 +214,8 @@ public class ServerLauncher
 		return GameServerMessage.GameServerOperation
 			.newBuilder()
 			.setOperation(GameServerMessage.GameServerOperation.Type.DELTA)
-			.setBodyMessage(message.toByteString()).build().toByteArray();
+			.setBodyMessage(message.toByteString())
+			.build().toByteArray();
 	}
 
 	public static void main(String...args) throws IOException, InterruptedException

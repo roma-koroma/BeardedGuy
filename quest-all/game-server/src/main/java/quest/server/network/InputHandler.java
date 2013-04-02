@@ -2,10 +2,13 @@ package quest.server.network;
 
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
+import com.google.protobuf.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import quest.client.model.BeardedGuy;
 import quest.protocol.ClientMessage;
+import quest.protocol.CommonMessages;
+import quest.protocol.GameServerMessage;
 import quest.server.GameController;
 
 import static quest.server.util.SerializationUtil.serializeGuy;
@@ -34,9 +37,16 @@ public class InputHandler implements Handler
 			BeardedGuy guy = gameController.moveById(clientId, op.getInput(0));
 
 			if( guy != null)
-				post.broadcast(serializeGuy(guy));
+				post.broadcast(serializeGameState(serializeGuy(guy)));
 		}
 
+	}
+
+	private Message serializeGameState(CommonMessages.User user)
+	{
+		return GameServerMessage.GameStateOperation.newBuilder()
+		.addUser(user)
+		.build();
 	}
 
 	private ClientMessage.InputOperation parseMessage(ByteString message)

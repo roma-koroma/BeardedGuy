@@ -20,11 +20,11 @@ public class GameController
 	 */
 	private static final Logger logger = LoggerFactory.getLogger(GameController.class);
 
-	Map<Long, BeardedGuy> guys;
+	Map<Integer, BeardedGuy> guys;
 
 	public GameController()
 	{
-		this.guys = new HashMap<Long, BeardedGuy>();
+		this.guys = new HashMap<Integer, BeardedGuy>();
 	}
 
 	/**
@@ -54,5 +54,10 @@ public class GameController
 			CommonMessages.Point newPosition = user.getPosition();
 			guy.setPosition(new Point(user.getPosition().getX(), user.getPosition().getY()));
 		}
+	}
+
+	public void newGuy(BeardedGuy guy)
+	{
+		this.guys.put(guy.getId(), guy);
 	}
 }

@@ -54,8 +54,9 @@ public class ClientLauncher
 
 	public ClientLauncher() throws IOException, InterruptedException
     {
-		initRegistry();
 		this.gameController = new GameController();
+
+		initRegistry();
 
 		inputEvents = new ArrayDeque<RandomInputSource.Event>();
 
@@ -69,7 +70,7 @@ public class ClientLauncher
         while (true)
         {
 
-            while (k.selector().select() > 0)
+            while (selector.select() > 0)
             {
                 source.tick();
 				for( RandomInputSource.Event event : source.getEvents())
@@ -87,7 +88,7 @@ public class ClientLauncher
                     key = iter.next();
                     iter.remove();
 
-					if(!inputEvents.isEmpty())
+					if (!inputEvents.isEmpty())
 					{
 						key.interestOps(SelectionKey.OP_WRITE);
 					}
@@ -98,6 +99,7 @@ public class ClientLauncher
                         read(key);
                     if(key.isWritable())
                         write(key);
+
                 }
                 Thread.sleep(500);
             }
@@ -154,9 +156,6 @@ public class ClientLauncher
 			ch.write(writeBuffer);
 		}
 		key.interestOps(SelectionKey.OP_READ);
-
-		logger.info("Write block {}", key.interestOps());
-
 
 	}
 
@@ -222,8 +221,7 @@ public class ClientLauncher
 					)
 				);
 				guy.setId(result.getUser().getId());
-//				key.interestOps(SelectionKey.OP_WRITE | SelectionKey.OP_READ);
-
+				gameController.newGuy(guy);
 			}
 		}
 		else
@@ -239,8 +237,6 @@ public class ClientLauncher
 				handler.handle(op.getBodyMessage());
 			}
 		}
-		logger.info("Read block {}", key.interestOps());
-
 
 	}
 
