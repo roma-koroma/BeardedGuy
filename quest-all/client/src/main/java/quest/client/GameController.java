@@ -10,9 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * User: Roman Koretskiy
- * Date: 01.04.13
- * Time: 23:54
+ * @author Roman Koretskiy
  */
 public class GameController
 {

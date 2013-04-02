@@ -49,11 +49,13 @@ public class ClientLauncher
 
 	private Map<GameServerMessage.GameServerOperation.Type, Handler> operationRegistry;
 
+	private GameController gameController;
+
 
 	public ClientLauncher() throws IOException, InterruptedException
     {
 		initRegistry();
-
+		this.gameController = new GameController();
 
 		inputEvents = new ArrayDeque<RandomInputSource.Event>();
 
@@ -85,11 +87,16 @@ public class ClientLauncher
                     key = iter.next();
                     iter.remove();
 
+					if(!inputEvents.isEmpty())
+					{
+						key.interestOps(SelectionKey.OP_WRITE);
+					}
+
                     if(key.isConnectable())
                         finishConnect(key);
-                    else if(key.isReadable())
+                    if(key.isReadable())
                         read(key);
-                    else if(key.isWritable())
+                    if(key.isWritable())
                         write(key);
                 }
                 Thread.sleep(500);
@@ -101,10 +108,17 @@ public class ClientLauncher
 	private void initRegistry()
 	{
 		this.operationRegistry = new EnumMap<GameServerMessage.GameServerOperation.Type, Handler>(GameServerMessage.GameServerOperation.Type.class);
-		operationRegistry.put(GameServerMessage.GameServerOperation.Type.DELTA, new DeltaHandler());
+		operationRegistry.put(GameServerMessage.GameServerOperation.Type.DELTA, deltaHandler());
 	}
 
- 	private void write(SelectionKey key) throws IOException
+	private Handler deltaHandler()
+	{
+		DeltaHandler handler = new DeltaHandler();
+		handler.setGameController(gameController);
+		return handler;
+	}
+
+	private void write(SelectionKey key) throws IOException
     {
         SocketChannel ch = (SocketChannel) key.channel();
 
@@ -122,6 +136,7 @@ public class ClientLauncher
 			writeBuffer.put(auth);
 			writeBuffer.position(0);
 			ch.write(writeBuffer);
+			//отправили данные аутентификации и теперь нам интересен только ответ.
 		}
 		else
 		{
@@ -132,10 +147,16 @@ public class ClientLauncher
 				.ClientOperation.Type.INPUT)
 				.setBodyMessage(getInput())
 				.build().toByteArray();
-			ch.write(writeBuffer.putInt(0, input.length).put(input));
+			writeBuffer.putInt(0, input.length);
+			writeBuffer.position(4);
+			writeBuffer.put(input);
+			writeBuffer.position(0);
+			ch.write(writeBuffer);
 		}
-
 		key.interestOps(SelectionKey.OP_READ);
+
+		logger.info("Write block {}", key.interestOps());
+
 
 	}
 
@@ -190,6 +211,7 @@ public class ClientLauncher
 					.AuthOperationResult
 					.parseFrom(
 						ByteString.copyFrom(readBuffer.array(), 4, size));
+
 			if(result.getIsSuccess())
 			{
 				guy = new BeardedGuy(
@@ -200,7 +222,7 @@ public class ClientLauncher
 					)
 				);
 				guy.setId(result.getUser().getId());
-				key.interestOps(SelectionKey.OP_WRITE | SelectionKey.OP_WRITE );
+//				key.interestOps(SelectionKey.OP_WRITE | SelectionKey.OP_READ);
 
 			}
 		}
@@ -212,13 +234,15 @@ public class ClientLauncher
 			GameServerMessage.GameServerOperation op = GameServerMessage.GameServerOperation
 				.parseFrom(ByteString.copyFrom(readBuffer.array(), 4, size));
 			Handler handler = operationRegistry.get(op.getOperation());
-			if(op.getOperation() == GameServerMessage.GameServerOperation.Type.DELTA)
+			if(handler != null)
 			{
 				handler.handle(op.getBodyMessage());
 			}
 		}
+		logger.info("Read block {}", key.interestOps());
 
-    }
+
+	}
 
     private void finishConnect(SelectionKey key) throws IOException
     {

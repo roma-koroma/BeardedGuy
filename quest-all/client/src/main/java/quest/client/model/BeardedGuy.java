@@ -46,42 +46,6 @@ public class BeardedGuy
         return position;
     }
 
-    public void tick(RandomInputSource source)
-    {
-
-    }
-
-    public void move(Direction direction)
-    {
-        int oldX = this.position.getX();
-        int oldY = this.position.getY();
-
-        switch(direction)
-        {
-            case DOWN:
-                move(-1 ,0);
-                break;
-            case UP:
-                move(1, 0);
-                break;
-            case LEFT:
-                move(0, -1);
-                break;
-            case RIGHT:
-                move(0, 1);
-                break;
-        }
-
-        logger.info("\"{}\" move {} from [{},{}] to [{},{}]",
-            new Object[]{ this.name, direction.name() , oldX, oldY, position.getX(), position.getY() });
-    }
-
-    private void move(int x, int y)
-    {
-        this.position = new Point(position.getX() + x, position.getY() + y);
-    }
-
-
     public void setName(String name)
     {
         this.name = name;

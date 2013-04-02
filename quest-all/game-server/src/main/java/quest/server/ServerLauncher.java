@@ -1,12 +1,18 @@
 package quest.server;
 
 import com.google.protobuf.ByteString;
+import com.google.protobuf.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import quest.client.model.BeardedGuy;
 import quest.client.model.Point;
+import quest.protocol.ClientMessage;
 import quest.protocol.CommonMessages;
+import quest.protocol.GameServerMessage;
 import quest.protocol.LoginServerMessage;
+import quest.server.network.Handler;
+import quest.server.network.InputHandler;
+import quest.server.network.Post;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -15,9 +21,9 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+
+import static quest.server.util.SerializationUtil.serializeGuy;
 
 /**
  * @author Roman Koretskiy
@@ -33,12 +39,28 @@ public class ServerLauncher
 
     ByteBuffer buffer = ByteBuffer.allocate(BUFFER_SIZE);
 
-    UserController userController;
 	private boolean isCreated = false;
+
+	Map<SelectionKey, Integer> keyToId;
+
+	Map<ClientMessage.ClientOperation.Type, Handler> operationRegistry;
+
+	/**
+	 * Ящики сообщений клиентов.
+	 */
+	private Post post;
+	private GameController gameController;
 
 	public ServerLauncher() throws IOException, InterruptedException
     {
+		//INIT
+		this.post = new Post();
+		this.keyToId = new HashMap<SelectionKey, Integer>();
+		gameController = new GameController();
+		initRegistry();
         ServerSocketChannel ssc = configure();
+
+
 
         Selector selector = Selector.open();
         SelectionKey acceptKey = ssc.register(selector, SelectionKey.OP_ACCEPT);
@@ -57,11 +79,16 @@ public class ServerLauncher
                     key = iter.next();
                     iter.remove();
 
+					if(post.hasMessages(keyToId.get(key)))
+					{
+						key.interestOps(SelectionKey.OP_WRITE);
+					}
+
                     if (key.isAcceptable())
                         accept(key, selector);
-                    else if (key.isReadable())
+                    if (key.isReadable())
                         read(key);
-                    else if (key.isWritable())
+                    if (key.isWritable())
                         write(key);
                     Thread.sleep(500);
                 }
@@ -71,7 +98,22 @@ public class ServerLauncher
 
     }
 
-    private ServerSocketChannel configure() throws IOException
+	private void initRegistry()
+	{
+		this.operationRegistry =
+			new EnumMap<ClientMessage.ClientOperation.Type, Handler>(ClientMessage.ClientOperation.Type.class);
+		operationRegistry.put(ClientMessage.ClientOperation.Type.INPUT, inputHandler());
+	}
+
+	private Handler inputHandler()
+	{
+		InputHandler ret =new InputHandler();
+		ret.setGameController(gameController);
+		return ret;
+
+	}
+
+	private ServerSocketChannel configure() throws IOException
     {
         ServerSocketChannel ssc = ServerSocketChannel.open();
         ssc.configureBlocking(false);
@@ -84,7 +126,7 @@ public class ServerLauncher
         logger.info("new client accepted");
         SocketChannel channel = ((ServerSocketChannel) key.channel()).accept();
         channel.configureBlocking(false);
-        channel.register(selector, SelectionKey.OP_READ);
+        SelectionKey newClient = channel.register(selector, SelectionKey.OP_READ);
     }
 
     private void read(SelectionKey key) throws IOException
@@ -92,16 +134,23 @@ public class ServerLauncher
 		SocketChannel ch = (SocketChannel) key.channel();
 		buffer.clear();
         ch.read(buffer);
-		if(!isCreated)
+		int size = buffer.getInt(0);
+
+		Integer id = keyToId.get(key);
+
+		if(id == null)
 		{
-			int size = buffer.getInt(0);
 			LoginServerMessage.AuthOperation auth =
 				LoginServerMessage.AuthOperation
 					.parseFrom(ByteString.copyFrom(buffer.array(), 4, size));
 			logger.info("login:{}, password:{}", auth.getLogin(), auth.getPassword());
 
-			BeardedGuy guy = new BeardedGuy(auth.getLogin().toUpperCase(), new Point(0, 0));
-			guy.setId(1);
+			BeardedGuy guy = gameController.getGuyByLogin(auth.getLogin().toUpperCase());
+
+			//save new user locally
+			keyToId.put(key, guy.getId());
+			post.addClient(guy.getId());
+			//sent everyone
 
 			byte[] result = LoginServerMessage.AuthOperationResult.newBuilder()
 				.setIsSuccess(true)
@@ -115,42 +164,64 @@ public class ServerLauncher
 			buffer.position(0);
 			ch.write(buffer);
 
-			isCreated = true;
 			key.interestOps(SelectionKey.OP_READ | SelectionKey.OP_WRITE);
-
+		}
+		else
+		{
+			ClientMessage.ClientOperation op =
+				ClientMessage.ClientOperation
+					.parseFrom(ByteString.copyFrom(buffer.array(), 4, size));
+			Handler handler = operationRegistry.get((op.getOperation()));
+			if( handler != null)
+			{
+				handler.handle(op.getClientId(), op.getBodyMessage(), post);
+			}
 		}
 
-	}
+		logger.info("Read block {}", key.interestOps());
 
-	private CommonMessages.User serializeGuy(BeardedGuy guy)
-	{
-		return CommonMessages.User.newBuilder()
-			.setId(guy.getId())
-			.setIsOnline(true)
-			.setName(guy.getName())
-			.setPosition(serializePoint(guy.getPosition()))
-			.build();
-	}
 
-	private CommonMessages.Point serializePoint(Point position)
-	{
-		return CommonMessages.Point.newBuilder()
-			.setX(position.getX())
-			.setY(position.getY()).build();
 	}
 
 	private void write(SelectionKey key) throws IOException
     {
-//        SocketChannel ch = (SocketChannel) key.channel();
-//        buffer.clear();
-//        ch.write(Charset.forName("US-ASCII").newEncoder().encode(CharBuffer.wrap("Hello!")));
-//        List<Events> events = getEventsForKey(key);
+		Integer id = keyToId.get(key);
+		if(id != null)
+		{
+			//TODO отправить все сообщения сразу.
 
+			Message message = post.getMessage(id);
+			if(message == null)
+				return;
 
-//		key.interestOps(SelectionKey.OP_READ);
-    }
+			byte[] msg = wrap(message);
 
-    public static void main(String...args) throws IOException, InterruptedException
+			SocketChannel ch = (SocketChannel) key.channel();
+			buffer.clear();
+			buffer.putInt(0, msg.length);
+			buffer.position(4);
+			buffer.put(msg);
+			buffer.position(0);
+			ch.write(buffer);
+
+			if(!post.hasMessages(id))
+				key.interestOps(SelectionKey.OP_READ);
+		}
+
+		logger.info("Write block {}", key.interestOps());
+
+	}
+
+	//TODO убрать захардкоженный тип
+	private byte[] wrap(Message message)
+	{
+		return GameServerMessage.GameServerOperation
+			.newBuilder()
+			.setOperation(GameServerMessage.GameServerOperation.Type.DELTA)
+			.setBodyMessage(message.toByteString()).build().toByteArray();
+	}
+
+	public static void main(String...args) throws IOException, InterruptedException
     {
         new ServerLauncher();
     }
