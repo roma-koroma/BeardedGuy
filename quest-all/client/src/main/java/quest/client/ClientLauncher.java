@@ -68,7 +68,7 @@ public class ClientLauncher
         SocketChannel channel = connect();
 
         Selector selector = Selector.open();
-        SelectionKey k = channel.register(selector, SelectionKey.OP_CONNECT);
+        channel.register(selector, SelectionKey.OP_CONNECT);
 
         RandomInputSource source = new RandomInputSource();
 
@@ -92,18 +92,28 @@ public class ClientLauncher
                 {
                     key = iter.next();
                     iter.remove();
-
-					if (!inputEvents.isEmpty())
+					try
 					{
-						key.interestOps(SelectionKey.OP_WRITE);
-					}
+						if (key.isValid())
+						{
+							if (!inputEvents.isEmpty())
+							{
+								key.interestOps(SelectionKey.OP_WRITE);
+							}
 
-                    if(key.isConnectable())
-                        finishConnect(key);
-                    if(key.isReadable())
-                        read(key);
-                    if(key.isWritable())
-                        write(key);
+							if (key.isValid() && key.isConnectable())
+								finishConnect(key);
+							if (key.isValid() && key.isReadable())
+								read(key);
+							if (key.isValid() && key.isWritable())
+								write(key);
+						}
+					}
+					catch(IOException err)
+					{
+						isShutdown = true;
+						logger.error("Some IOException but we continue", err);
+					}
 
                 }
                 Thread.sleep(500);
@@ -209,7 +219,7 @@ public class ClientLauncher
 		{
 			int byteCount = ch.read(readBuffer);
 
-			if(byteCount > 0)
+			if(byteCount >= 0)
 			{
 				if (guy == null)
 				{
@@ -260,6 +270,7 @@ public class ClientLauncher
 			isShutdown = true;
 			key.cancel();
 			key.channel().close();
+			return;
 		}
 
 	}

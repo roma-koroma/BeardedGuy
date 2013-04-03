@@ -17,10 +17,7 @@ import quest.server.network.Post;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.ByteBuffer;
-import java.nio.channels.SelectionKey;
-import java.nio.channels.Selector;
-import java.nio.channels.ServerSocketChannel;
-import java.nio.channels.SocketChannel;
+import java.nio.channels.*;
 import java.util.*;
 
 import static quest.server.util.SerializationUtil.serializeGuy;
@@ -78,18 +75,35 @@ public class ServerLauncher
                 {
                     key = iter.next();
                     iter.remove();
-
-                    if (key.isAcceptable())
-                        accept(key, selector);
-                    if (key.isReadable())
-                        read(key);
-                    if (key.isWritable())
-                        write(key);
-
-					if (post.hasMessages(keyToId.get(key)))
+					try
 					{
-						key.interestOps(SelectionKey.OP_WRITE);
+						if (key.isValid())
+						{
+							if (key.isValid() && key.isAcceptable())
+								accept(key, selector);
+							if (key.isValid() && key.isReadable())
+								read(key);
+							if (key.isValid() && key.isWritable())
+								write(key);
+
+							if (post.hasMessages(keyToId.get(key)))
+							{
+								key.interestOps(SelectionKey.OP_WRITE);
+							}
+						}
 					}
+					catch(CancelledKeyException err)
+					{
+						logger.error("CancelledKeyException while working with [{}]", keyToId.get(key));
+						continue;
+					}
+					catch(IOException err)
+					{
+						logger.error("Some IOException but we continue", err);
+						continue;
+					}
+
+
                 }
 
             }
@@ -136,7 +150,7 @@ public class ServerLauncher
 		try
 		{
 			int byteCount = ch.read(buffer);
-			if(byteCount > 0)
+			if(byteCount >= 0)
 			{
 				int size = buffer.getInt(0);
 
@@ -237,6 +251,7 @@ public class ServerLauncher
 			buffer.position(4);
 			buffer.put(msg);
 			buffer.position(0);
+
 			ch.write(buffer);
 
 			//TODO здесь может быть проблема при большом потоке других пишущих клиентов.
@@ -261,7 +276,4 @@ public class ServerLauncher
         new ServerLauncher();
     }
 
-    private class UserController
-    {
-    }
 }
