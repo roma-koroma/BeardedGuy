@@ -23,9 +23,12 @@ public class GameController
 
 	private Map<Integer , BeardedGuy> idToGuy;
 
+	private Map<String, Integer> authToId;
+
 	public GameController()
 	{
 		this.idToGuy = new HashMap<Integer, BeardedGuy>();
+		this.authToId = new HashMap<String, Integer>();
 	}
 
 	/**
@@ -35,11 +38,31 @@ public class GameController
 	 */
 	public BeardedGuy getGuyByLogin(String name)
 	{
-		BeardedGuy guy = new BeardedGuy(name , new Point(0, 0));
+		BeardedGuy guy = null;
+		Integer id = authToId.get(name);
+		if(id == null)
+		{
+			guy = new BeardedGuy(name, new Point(0, 0));
 
-		//выставляем id
-		guy.setId((int) System.currentTimeMillis() % Integer.MAX_VALUE);
-		idToGuy.put(guy.getId(), guy);
+			guy.setIsOnline(true);
+			//выставляем id
+			guy.setId((int) System.currentTimeMillis() % Integer.MAX_VALUE);
+			authToId.put(name, guy.getId());
+			idToGuy.put(guy.getId(), guy);
+		}
+		else
+		{
+			guy = idToGuy.get(id);
+			if(!guy.isOnline())
+			{
+				guy.setIsOnline(true);
+			}
+			else
+			{
+			    guy = null;
+				logger.info("guy already login");
+			}
+		}
 
 		return guy;
 	}
@@ -92,5 +115,15 @@ public class GameController
 	{
 		Point pos = guy.getPosition();
 		guy.setPosition(new Point(pos.getX() + x, pos.getY() + y)); ;
+	}
+
+	public BeardedGuy close(int id)
+	{
+		BeardedGuy guy = idToGuy.get(id);
+		if (guy != null)
+		{
+			guy.setIsOnline(false);
+		}
+		return guy;
 	}
 }

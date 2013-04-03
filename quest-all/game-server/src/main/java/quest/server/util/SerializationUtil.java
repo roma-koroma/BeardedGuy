@@ -21,7 +21,7 @@ public class SerializationUtil
 	{
 		return CommonMessages.User.newBuilder()
 			.setId(guy.getId())
-			.setIsOnline(true)
+			.setIsOnline(guy.isOnline())
 			.setName(guy.getName())
 			.setPosition(serializePoint(guy.getPosition()))
 			.build();

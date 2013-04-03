@@ -55,4 +55,9 @@ public class Post
 			return  true;
 		return false;
 	}
+
+	public void close(int id)
+	{
+
+	}
 }

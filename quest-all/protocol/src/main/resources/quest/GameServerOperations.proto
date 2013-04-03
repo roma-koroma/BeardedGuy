@@ -18,6 +18,7 @@ message GameServerOperation
     enum Type
     {
         DELTA = 1;
+        FULL = 2;
     }
 }
 

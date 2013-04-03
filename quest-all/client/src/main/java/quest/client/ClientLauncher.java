@@ -51,6 +51,11 @@ public class ClientLauncher
 
 	private GameController gameController;
 
+	/**
+	 * Флаг о необходимости выключать систему.
+	 */
+	private boolean isShutdown;
+
 
 	public ClientLauncher() throws IOException, InterruptedException
     {
@@ -67,7 +72,7 @@ public class ClientLauncher
 
         RandomInputSource source = new RandomInputSource();
 
-        while (true)
+        while (!isShutdown)
         {
 
             while (selector.select() > 0)
@@ -196,51 +201,71 @@ public class ClientLauncher
 	}
 
 	private void read(SelectionKey key) throws IOException
-    {
+	{
 		SocketChannel ch = (SocketChannel) key.channel();
 		readBuffer.clear();
-		ch.read(readBuffer);
 
-		if(guy == null)
+		try
 		{
-			int size = readBuffer.getInt(0);
+			int byteCount = ch.read(readBuffer);
 
-			LoginServerMessage.AuthOperationResult result =
-				LoginServerMessage
-					.AuthOperationResult
-					.parseFrom(
-						ByteString.copyFrom(readBuffer.array(), 4, size));
-
-			if(result.getIsSuccess())
+			if(byteCount > 0)
 			{
-				guy = new BeardedGuy(
-					result.getUser().getName(),
-					new Point(
-						result.getUser().getPosition().getX(),
-						result.getUser().getPosition().getY()
-					)
-				);
-				guy.setId(result.getUser().getId());
-				gameController.newGuy(guy);
+				if (guy == null)
+				{
+					int size = readBuffer.getInt(0);
+
+					LoginServerMessage.AuthOperationResult result =
+						LoginServerMessage
+							.AuthOperationResult
+							.parseFrom(
+								ByteString.copyFrom(readBuffer.array(), 4, size));
+
+					if (result.getIsSuccess())
+					{
+						guy = new BeardedGuy(
+							result.getUser().getName(),
+							new Point(
+								result.getUser().getPosition().getX(),
+								result.getUser().getPosition().getY()
+							)
+						);
+						guy.setId(result.getUser().getId());
+						gameController.newGuy(guy);
+					}
+				} else
+				{
+					int size = readBuffer.getInt(0);
+
+					//read cooridantes;
+					GameServerMessage.GameServerOperation op = GameServerMessage.GameServerOperation
+						.parseFrom(ByteString.copyFrom(readBuffer.array(), 4, size));
+					Handler handler = operationRegistry.get(op.getOperation());
+					if (handler != null)
+					{
+						handler.handle(op.getBodyMessage());
+					}
+				}
+			}
+			else
+			{
+				key.channel().close();
+				key.cancel();
+				isShutdown = true;
 			}
 		}
-		else
+		catch(IOException err)
 		{
-			int size = readBuffer.getInt(0);
-
-			//read cooridantes;
-			GameServerMessage.GameServerOperation op = GameServerMessage.GameServerOperation
-				.parseFrom(ByteString.copyFrom(readBuffer.array(), 4, size));
-			Handler handler = operationRegistry.get(op.getOperation());
-			if(handler != null)
-			{
-				handler.handle(op.getBodyMessage());
-			}
+			logger.info("Server unexpectedly closed connection", err);
+			isShutdown = true;
+			key.cancel();
+			key.channel().close();
 		}
 
 	}
 
-    private void finishConnect(SelectionKey key) throws IOException
+
+	private void finishConnect(SelectionKey key) throws IOException
     {
         SocketChannel ch = (SocketChannel) (key.channel());
         if(ch.finishConnect())

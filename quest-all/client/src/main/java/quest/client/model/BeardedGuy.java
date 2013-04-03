@@ -19,6 +19,8 @@ public class BeardedGuy
 
     private static final String DEFAULT_NAME = "Unknown guy";
 	private int id;
+	private boolean online;
+	private boolean isOnline;
 
 	public BeardedGuy(String name, Point position)
     {
@@ -64,5 +66,15 @@ public class BeardedGuy
 	public String getName()
 	{
 		return name;
+	}
+
+	public boolean isOnline()
+	{
+		return isOnline;
+	}
+
+	public void setIsOnline(boolean online)
+	{
+		isOnline = online;
 	}
 }

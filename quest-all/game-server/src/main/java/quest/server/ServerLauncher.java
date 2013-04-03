@@ -90,7 +90,6 @@ public class ServerLauncher
 					{
 						key.interestOps(SelectionKey.OP_WRITE);
 					}
-                    Thread.sleep(500);
                 }
 
             }
@@ -126,58 +125,97 @@ public class ServerLauncher
         logger.info("new client accepted");
         SocketChannel channel = ((ServerSocketChannel) key.channel()).accept();
         channel.configureBlocking(false);
-        SelectionKey newClient = channel.register(selector, SelectionKey.OP_READ);
+        channel.register(selector, SelectionKey.OP_READ);
     }
 
     private void read(SelectionKey key) throws IOException
     {
 		SocketChannel ch = (SocketChannel) key.channel();
 		buffer.clear();
-        ch.read(buffer);
-		int size = buffer.getInt(0);
 
-		Integer id = keyToId.get(key);
-
-		if(id == null)
+		try
 		{
-			LoginServerMessage.AuthOperation auth =
-				LoginServerMessage.AuthOperation
-					.parseFrom(ByteString.copyFrom(buffer.array(), 4, size));
-			logger.info("login:{}, password:{}", auth.getLogin(), auth.getPassword());
-
-			BeardedGuy guy = gameController.getGuyByLogin(auth.getLogin().toUpperCase());
-
-			//save new user locally
-			keyToId.put(key, guy.getId());
-			post.addClient(guy.getId());
-			//sent everyone
-
-			byte[] result = LoginServerMessage.AuthOperationResult.newBuilder()
-				.setIsSuccess(true)
-				.setUser(serializeGuy(guy))
-				.build().toByteArray();
-
-			buffer.clear();
-			buffer.putInt(0, result.length);
-			buffer.position(4);
-			buffer.put(result);
-			buffer.position(0);
-			ch.write(buffer);
-
-			key.interestOps(SelectionKey.OP_READ);
-		}
-		else
-		{
-			ClientMessage.ClientOperation op =
-				ClientMessage.ClientOperation
-					.parseFrom(ByteString.copyFrom(buffer.array(), 4, size));
-			Handler handler = operationRegistry.get((op.getOperation()));
-			if( handler != null)
+			int byteCount = ch.read(buffer);
+			if(byteCount > 0)
 			{
-				handler.handle(op.getClientId(), op.getBodyMessage(), post);
-			}
-		}
+				int size = buffer.getInt(0);
 
+				Integer id = keyToId.get(key);
+
+				if (id == null)
+				{
+					LoginServerMessage.AuthOperation auth =
+						LoginServerMessage.AuthOperation
+							.parseFrom(ByteString.copyFrom(buffer.array(), 4, size));
+					logger.info("login:{}, password:{}", auth.getLogin(), auth.getPassword());
+
+					BeardedGuy guy = gameController.getGuyByLogin(auth.getLogin().toUpperCase());
+
+					//save new user locally
+					keyToId.put(key, guy.getId());
+					post.addClient(guy.getId());
+					//sent everyone
+
+					byte[] result = LoginServerMessage.AuthOperationResult.newBuilder()
+						.setIsSuccess(true)
+						.setUser(serializeGuy(guy))
+						.build().toByteArray();
+
+					buffer.clear();
+					buffer.putInt(0, result.length);
+					buffer.position(4);
+					buffer.put(result);
+					buffer.position(0);
+					ch.write(buffer);
+
+					post.broadcast(serializeGuy(guy));
+
+					key.interestOps(SelectionKey.OP_READ);
+				} else
+				{
+					ClientMessage.ClientOperation op =
+						ClientMessage.ClientOperation
+							.parseFrom(ByteString.copyFrom(buffer.array(), 4, size));
+					Handler handler = operationRegistry.get((op.getOperation()));
+					if (handler != null)
+					{
+						handler.handle(op.getClientId(), op.getBodyMessage(), post);
+					}
+				}
+			}
+			else
+			{
+				closeConnection(key);
+			}
+
+		}
+		catch(IOException err)
+		{
+			logger.info("Client {} unexpectedly closed connection", keyToId.get(key));
+			closeConnection(key);
+		}
+	}
+
+	/**
+	 * Бережно закрываем соединение
+	 * @param key
+	 */
+	private void closeConnection(SelectionKey key)
+	{
+		try
+		{
+			int id = keyToId.get(key);
+
+			BeardedGuy guy = gameController.close(id);
+			post.close(id);
+			post.broadcast(serializeGuy(guy));
+			key.cancel();
+			key.channel().close();
+		}
+		catch (IOException err)
+		{
+			logger.error("Error while close channel", err);
+		}
 	}
 
 	private void write(SelectionKey key) throws IOException
