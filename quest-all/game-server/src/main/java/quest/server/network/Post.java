@@ -56,8 +56,22 @@ public class Post
 		return false;
 	}
 
+	/**
+	 * Удаляет все сообщения клиента и самого клиента из ящика.
+	 * @param id
+	 */
 	public void close(int id)
 	{
+		Deque<Message> deq = messages.get(id);
+		if(deq != null)
+			messages.get(id).clear();
+		messages.remove(id);
+	}
 
+	public void sendTo(int id, Message message)
+	{
+		Deque<Message> deq = messages.get(id);
+		if(deq != null)
+			deq.addFirst(message);
 	}
 }

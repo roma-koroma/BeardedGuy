@@ -4,7 +4,7 @@ import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import quest.client.GameController;
+import quest.client.controller.GameController;
 import quest.protocol.CommonMessages;
 import quest.protocol.GameServerMessage;
 

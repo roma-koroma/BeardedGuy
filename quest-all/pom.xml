@@ -13,6 +13,7 @@
         <module>client</module>
         <module>game-server</module>
         <module>protocol</module>
+        <module>common</module>
     </modules>
 
     <properties>

@@ -5,11 +5,11 @@ import com.google.protobuf.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import quest.client.model.BeardedGuy;
-import quest.client.model.Point;
 import quest.protocol.ClientMessage;
 import quest.protocol.CommonMessages;
 import quest.protocol.GameServerMessage;
 import quest.protocol.LoginServerMessage;
+import quest.server.dao.InMemoryGameController;
 import quest.server.network.Handler;
 import quest.server.network.InputHandler;
 import quest.server.network.Post;
@@ -20,7 +20,7 @@ import java.nio.ByteBuffer;
 import java.nio.channels.*;
 import java.util.*;
 
-import static quest.server.util.SerializationUtil.serializeGuy;
+import static quest.client.util.SerializationUtil.serializeGuy;
 
 /**
  * @author Roman Koretskiy
@@ -46,14 +46,14 @@ public class ServerLauncher
 	 * Ящики сообщений клиентов.
 	 */
 	private Post post;
-	private GameController gameController;
+	private InMemoryGameController gameController;
 
 	public ServerLauncher() throws IOException, InterruptedException
     {
 		//INIT
 		this.post = new Post();
 		this.keyToId = new HashMap<SelectionKey, Integer>();
-		gameController = new GameController();
+		gameController = new InMemoryGameController();
 		initRegistry();
         ServerSocketChannel ssc = configure();
 
@@ -175,13 +175,9 @@ public class ServerLauncher
 						.setUser(serializeGuy(guy))
 						.build().toByteArray();
 
-					buffer.clear();
-					buffer.putInt(0, result.length);
-					buffer.position(4);
-					buffer.put(result);
-					buffer.position(0);
-					ch.write(buffer);
+					writeMessage(ch, result);
 
+					post.sendTo(guy.getId(), gameState(gameController.getFullModel()));
 					post.broadcast(serializeGuy(guy));
 
 					key.interestOps(SelectionKey.OP_READ);
@@ -209,6 +205,27 @@ public class ServerLauncher
 			closeConnection(key);
 		}
 	}
+
+	private List<CommonMessages.User> gameState(Collection<BeardedGuy> fullModel)
+	{
+		List<CommonMessages.User> ret =  new ArrayList<CommonMessages.User>();
+		for(BeardedGuy guy : fullModel)
+		{
+			ret.add(serializeGuy(guy));
+		}
+		return ret;
+	}
+
+	private void writeMessage(SocketChannel ch, byte[] result) throws IOException
+	{
+		buffer.clear();
+		buffer.putInt(0, result.length);
+		buffer.position(4);
+		buffer.put(result);
+		buffer.position(0);
+		ch.write(buffer);
+	}
+
 
 	/**
 	 * Бережно закрываем соединение
@@ -243,16 +260,10 @@ public class ServerLauncher
 			if(message == null)
 				return;
 
-			byte[] msg = wrap(message);
+			byte[] msg = wrap(message, GameServerMessage.GameServerOperation.Type.DELTA);
 
 			SocketChannel ch = (SocketChannel) key.channel();
-			buffer.clear();
-			buffer.putInt(0, msg.length);
-			buffer.position(4);
-			buffer.put(msg);
-			buffer.position(0);
-
-			ch.write(buffer);
+			writeMessage(ch, msg);
 
 			//TODO здесь может быть проблема при большом потоке других пишущих клиентов.
 			if(!post.hasMessages(id))
@@ -261,12 +272,11 @@ public class ServerLauncher
 
 	}
 
-	//TODO убрать захардкоженный тип
-	private byte[] wrap(Message message)
+	private byte[] wrap(Message message, GameServerMessage.GameServerOperation.Type type)
 	{
 		return GameServerMessage.GameServerOperation
 			.newBuilder()
-			.setOperation(GameServerMessage.GameServerOperation.Type.DELTA)
+			.setOperation(type)
 			.setBodyMessage(message.toByteString())
 			.build().toByteArray();
 	}

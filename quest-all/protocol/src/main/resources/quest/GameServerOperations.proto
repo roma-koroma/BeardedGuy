@@ -1,28 +1,79 @@
 /**
  * @author Roman Koretskiy
- * @since 
  */
-package quest;
+package quest.client;
 
 option java_package = "quest.protocol";
 option java_outer_classname = "GameServerMessage";
 
 import "src/main/resources/quest/Common.proto";
 
-
-message GameServerOperation
+message FullGameState
 {
-    required Type operation = 1;
-    required bytes bodyMessage = 2;
+    repeated Character user = 1;
+}
 
-    enum Type
+message DeltaGameState
+{
+    //новые сущности
+    repeated Character addedEntities = 1;
+
+    //удаленные сущности
+    repeated Character deletedEntities = 2;
+
+    //список действий.
+    repeated Action action = 2;
+
+    message Move
     {
-        DELTA = 1;
-        FULL = 2;
+        //двигающаяся сущность
+        required uint32 entityId = 1;
+
+        //новая позиция
+        required Point newPosition = 2;
     }
+
+    message Attack
+    {
+        //атакующая сущность
+        required uint32 entityId = 1;
+
+        //жертва
+        required uint32 targetId = 2;
+
+        //урон
+        required uint32 damage = 3;
+
+        //критичный ли был удар.
+        required bool isCritical = 4;
+    }
+
+    message Cast
+    {
+
+        //скастовавшее существо
+        required uint32 entityId = 1;
+
+        //идентификатор заклинания
+        required uint32 spellId = 2;
+
+        //заклинание может быть наложено либо на точку, либо на сущность
+        optional uint32 targetId = 3;
+
+        optional Point pointTarget = 4;
+
+        //урон
+        optional uint32 damage = 5;
+
+        //накладываемое состояние
+        optional State state = 6;
+
+        enum State
+        {
+            BLIND = 1;
+            BLEED = 2;
+        }
+    }
+
 }
 
-message GameStateOperation
-{
-    repeated User user = 1;
-}

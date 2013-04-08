@@ -3,10 +3,13 @@ package quest.client;
 import com.google.protobuf.ByteString;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import quest.client.controller.GameController;
 import quest.client.model.BeardedGuy;
 import quest.client.model.Point;
 import quest.client.model.RandomInputSource;
-import quest.client.network.DeltaHandler;import quest.client.network.Handler;
+import quest.client.network.DeltaHandler;
+import quest.client.network.FullHandler;
+import quest.client.network.Handler;
 import quest.protocol.ClientMessage;
 import quest.protocol.GameServerMessage;
 import quest.protocol.LoginServerMessage;
@@ -37,10 +40,8 @@ public class ClientLauncher
     private ByteBuffer readBuffer = ByteBuffer.allocate(BUFFER_SIZE);
     private ByteBuffer writeBuffer = ByteBuffer.allocate(BUFFER_SIZE);
 
-	public static final String LOGIN = "roman";
+	public String login;
 	public static final String PASS = "roman";
-
-	private BeardedGuy guy;
 
 	/**
 	 * Очередь, в которую пишутся все события ввода.
@@ -57,8 +58,10 @@ public class ClientLauncher
 	private boolean isShutdown;
 
 
-	public ClientLauncher() throws IOException, InterruptedException
+	public ClientLauncher(String name) throws IOException, InterruptedException
     {
+
+		this.login = name;
 		this.gameController = new GameController();
 
 		initRegistry();
@@ -112,7 +115,8 @@ public class ClientLauncher
 					catch(IOException err)
 					{
 						isShutdown = true;
-						logger.error("Some IOException but we continue", err);
+						logger.error("Some IOException ", err);
+						throw err;
 					}
 
                 }
@@ -126,6 +130,14 @@ public class ClientLauncher
 	{
 		this.operationRegistry = new EnumMap<GameServerMessage.GameServerOperation.Type, Handler>(GameServerMessage.GameServerOperation.Type.class);
 		operationRegistry.put(GameServerMessage.GameServerOperation.Type.DELTA, deltaHandler());
+		operationRegistry.put(GameServerMessage.GameServerOperation.Type.FULL, deltaHandler());
+	}
+
+	private Handler fullHandler()
+	{
+		FullHandler handler = new FullHandler();
+		handler.setGameController(gameController);
+		return handler;
 	}
 
 	private Handler deltaHandler()
@@ -144,9 +156,9 @@ public class ClientLauncher
 		 */
 		writeBuffer.clear();
 
-		if(guy == null)
+		if(gameController.getMainGuy() == null)
 		{
-			byte[] auth = LoginServerMessage.AuthOperation.newBuilder().setLogin(LOGIN).setPassword(PASS).build()
+			byte[] auth = LoginServerMessage.AuthOperation.newBuilder().setLogin(login).setPassword(PASS).build()
 				.toByteArray();
 			writeBuffer.putInt(0, auth.length);
 			writeBuffer.position(4);
@@ -159,7 +171,7 @@ public class ClientLauncher
 		{
 			byte[] input = ClientMessage
 				.ClientOperation.newBuilder()
-				.setClientId(guy.getId())
+				.setClientId(gameController.getMainGuy().getId())
 				.setOperation(ClientMessage
 				.ClientOperation.Type.INPUT)
 				.setBodyMessage(getInput())
@@ -221,7 +233,7 @@ public class ClientLauncher
 
 			if(byteCount >= 0)
 			{
-				if (guy == null)
+				if (gameController.getMainGuy() == null)
 				{
 					int size = readBuffer.getInt(0);
 
@@ -233,7 +245,7 @@ public class ClientLauncher
 
 					if (result.getIsSuccess())
 					{
-						guy = new BeardedGuy(
+						BeardedGuy guy = new BeardedGuy(
 							result.getUser().getName(),
 							new Point(
 								result.getUser().getPosition().getX(),
@@ -241,7 +253,7 @@ public class ClientLauncher
 							)
 						);
 						guy.setId(result.getUser().getId());
-						gameController.newGuy(guy);
+						gameController.setMainGuy(guy);
 					}
 				} else
 				{
@@ -303,7 +315,9 @@ public class ClientLauncher
 
     public static void main(String...args) throws IOException, InterruptedException
     {
-        new ClientLauncher();
+		if(args.length > 0)
+        	new ClientLauncher(args[0]);
+		new ClientLauncher("Unknown");
     }
 
 }

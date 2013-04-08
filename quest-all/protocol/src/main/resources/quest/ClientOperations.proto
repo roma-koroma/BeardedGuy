@@ -1,35 +1,46 @@
 /**
  * @author Roman Koretskiy
- * @since 
  */
-package quest;
+package quest.protocol;
 
 option java_package = "quest.protocol";
 option java_outer_classname = "ClientMessage";
 
 import "src/main/resources/quest/Common.proto";
 
-//правильнее было бы выделить ветку /game/{client, server}
-message ClientOperation
+//клиент и его реализация действий.
+message Client
 {
-    required Type operation = 1;
-    required uint32 clientId = 2;
-    optional bytes bodyMessage = 3;
+    repeated Action operation = 1;
 
-    enum Type
+    message Move
     {
-        INPUT = 1;
+        required Direction direction = 1;
+
+        enum Direction
+        {
+            UP = 1;
+            DOWN = 2;
+            LEFT = 3;
+            RIGHT = 4;
+        }
     }
+
+    message Attack
+    {
+        required targetId = 1;
+    }
+
+    message Cast
+    {
+        //идентификатор заклинания
+        required uint32 spellId = 2;
+
+        //заклинание может быть наложено либо на точку, либо на сущность
+        optional uint32 targetId = 3;
+
+        optional Point pointTarget = 4;
+    }
+
 }
 
-message InputOperation {
-    repeated Input input = 1;
-
-    enum Input {
-        UP_KEY = 1;
-        DOWN_KEY = 2;
-        LEFT_KEY = 3;
-        RIGHT_KEY = 4;
-        NONE = 5;
-    }
-}

@@ -1,13 +1,30 @@
+/**
+ * @author Roman Koretskiy
+ */
+package quest.protocol;
+
 option java_package = "quest.protocol";
 option java_outer_classname = "CommonMessages";
 
-//Пользователь
-message User
+
+message Character
 {
     required uint32 id = 1;
-    required string name = 2;
-    required bool isOnline = 3;
-    optional Point position = 4;
+
+    optional string name = 2;
+
+    optional Point position = 3;
+
+    optional int32 health = 4;
+
+    optional Weapon weapon = 5;
+
+}
+
+message Weapon
+{
+    optional int32 strength = 1;
+    optional int32 range = 2;
 }
 
 message Point
@@ -22,4 +39,21 @@ message Shard
     required uint32 port = 2;
     optional string name = 3;
     optional uint32 playersCount = 4;
+}
+
+message Action
+{
+    required Type type = 1;
+    required bytes message = 2;
+
+    enum Type
+    {
+        MOVE = 1;
+        ATTACK = 2;
+        CAST = 3;
+        ENTER = 4;
+        EXIT = 5;
+    }
+
+
 }

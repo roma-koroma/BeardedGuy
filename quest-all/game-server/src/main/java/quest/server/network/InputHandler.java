@@ -9,9 +9,9 @@ import quest.client.model.BeardedGuy;
 import quest.protocol.ClientMessage;
 import quest.protocol.CommonMessages;
 import quest.protocol.GameServerMessage;
-import quest.server.GameController;
+import quest.server.dao.InMemoryGameController;
 
-import static quest.server.util.SerializationUtil.serializeGuy;
+import static quest.client.util.SerializationUtil.serializeGuy;
 
 /**
  * @author Roman K.
@@ -24,7 +24,7 @@ public class InputHandler implements Handler
 	 */
 	private static final Logger logger = LoggerFactory.getLogger(InputHandler.class);
 
-	private GameController gameController;
+	private InMemoryGameController gameController;
 
 	@Override
 	public void handle(int clientId, ByteString bodyMessage, Post post)
@@ -61,7 +61,7 @@ public class InputHandler implements Handler
 		}
 	}
 
-	public void setGameController(GameController gameController)
+	public void setGameController(InMemoryGameController gameController)
 	{
 		this.gameController = gameController;
 	}

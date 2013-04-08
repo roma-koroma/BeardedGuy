@@ -50,9 +50,11 @@ public final class GameServerMessage {
     public enum Type
         implements com.google.protobuf.ProtocolMessageEnum {
       DELTA(0, 1),
+      FULL(1, 2),
       ;
       
       public static final int DELTA_VALUE = 1;
+      public static final int FULL_VALUE = 2;
       
       
       public final int getNumber() { return value; }
@@ -60,6 +62,7 @@ public final class GameServerMessage {
       public static Type valueOf(int value) {
         switch (value) {
           case 1: return DELTA;
+          case 2: return FULL;
           default: return null;
         }
       }
@@ -90,7 +93,7 @@ public final class GameServerMessage {
       }
       
       private static final Type[] VALUES = {
-        DELTA, 
+        DELTA, FULL, 
       };
       
       public static Type valueOf(
@@ -1081,12 +1084,12 @@ public final class GameServerMessage {
     java.lang.String[] descriptorData = {
       "\n3src/main/resources/quest/GameServerOpe" +
       "rations.proto\022\005quest\032%src/main/resources" +
-      "/quest/Common.proto\"q\n\023GameServerOperati" +
+      "/quest/Common.proto\"{\n\023GameServerOperati" +
       "on\0222\n\toperation\030\001 \002(\0162\037.quest.GameServer" +
-      "Operation.Type\022\023\n\013bodyMessage\030\002 \002(\014\"\021\n\004T" +
-      "ype\022\t\n\005DELTA\020\001\")\n\022GameStateOperation\022\023\n\004" +
-      "user\030\001 \003(\0132\005.UserB#\n\016quest.protocolB\021Gam" +
-      "eServerMessage"
+      "Operation.Type\022\023\n\013bodyMessage\030\002 \002(\014\"\033\n\004T" +
+      "ype\022\t\n\005DELTA\020\001\022\010\n\004FULL\020\002\")\n\022GameStateOpe" +
+      "ration\022\023\n\004user\030\001 \003(\0132\005.UserB#\n\016quest.pro" +
+      "tocolB\021GameServerMessage"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {

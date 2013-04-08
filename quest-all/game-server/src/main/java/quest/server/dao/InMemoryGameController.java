@@ -1,31 +1,32 @@
-package quest.server;
+package quest.server.dao;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import quest.client.model.BeardedGuy;
-import quest.client.model.Direction;
 import quest.client.model.Point;
 import quest.protocol.ClientMessage;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Реализация контроллера, который все держит в памяти
  * @author Roman K.
  */
-public class GameController
+public class InMemoryGameController implements GameController
 {
 
 	/**
 	 * Логгер
 	 */
-	private static final Logger logger = LoggerFactory.getLogger(GameController.class);
+	private static final Logger logger = LoggerFactory.getLogger(InMemoryGameController.class);
 
 	private Map<Integer , BeardedGuy> idToGuy;
 
 	private Map<String, Integer> authToId;
 
-	public GameController()
+	public InMemoryGameController()
 	{
 		this.idToGuy = new HashMap<Integer, BeardedGuy>();
 		this.authToId = new HashMap<String, Integer>();
@@ -125,5 +126,10 @@ public class GameController
 			guy.setIsOnline(false);
 		}
 		return guy;
+	}
+
+	public Collection<BeardedGuy> getFullModel()
+	{
+		return idToGuy.values();
 	}
 }
