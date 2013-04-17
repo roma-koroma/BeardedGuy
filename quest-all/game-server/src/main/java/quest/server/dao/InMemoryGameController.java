@@ -113,10 +113,21 @@ public class InMemoryGameController
 
 	}
 
-	private void move(BeardedGuy guy, int x, int y)
+	private void move(BeardedGuy movedGuy, int x, int y)
 	{
-		Point pos = guy.getPosition();
-		guy.setPosition(new Point(pos.getX() + x, pos.getY() + y)); ;
+		Point pos = movedGuy.getPosition();
+		Point newPos = new Point(pos.getX() + x, pos.getY() + y);
+
+		for( BeardedGuy guy : idToGuy.values())
+		{
+			if (guy.getPosition().equals(newPos))
+			{
+				logger.info("Can't move. Point [{},{}] already taken by {}:{}",
+					new Object[]{newPos.getX(), newPos.getY(), guy.getId(), guy.getName()});
+				return;
+			}
+		}
+		movedGuy.setPosition(newPos);
 	}
 
 	public BeardedGuy close(int id)
