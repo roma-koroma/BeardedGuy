@@ -1,8 +1,9 @@
 package quest.server.network;
 
-import com.google.protobuf.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import quest.client.model.BeardedGuy;
+import quest.protocol.Common;
 
 import java.util.*;
 
@@ -17,30 +18,42 @@ public class Post
 	 */
 	private static final Logger logger = LoggerFactory.getLogger(Post.class);
 
-	Map<Integer, Deque<Message>> messages;
+	Map<Integer, Deque<Common.Action>> messages;
 
 	public Post()
 	{
-		this.messages = new HashMap<Integer, Deque<Message>>();
+		this.messages = new HashMap<Integer, Deque<Common.Action>>();
 	}
 
 	public void addClient(int id)
 	{
-		this.messages.put(id, new ArrayDeque<Message>());
+		this.messages.put(id, new ArrayDeque<Common.Action>());
 	}
 
-	public void broadcast(Message message)
+	public void broadcast(Common.Action message)
 	{
 		//TODO сообщения одного типа должны группироваться
-		for(Deque<Message> deque : messages.values())
+		for(Deque<Common.Action> deque : messages.values())
 		{
 			deque.addFirst(message);
 		}
 	}
 
-	public Message getMessage(Integer id)
+	public void broadcastWithExcluding(Common.Action message, int id)
 	{
-		Deque<Message> queue = messages.get(id);
+		for (Map.Entry<Integer, Deque<Common.Action>> entry: messages.entrySet())
+		{
+			if(entry.getKey() == id)
+			{
+				continue;
+			}
+			entry.getValue().addFirst(message);
+		}
+	}
+
+	public Common.Action getMessage(Integer id)
+	{
+		Deque<Common.Action> queue = messages.get(id);
 		if(queue != null && !queue.isEmpty())
 		{
 			return queue.removeLast();
@@ -48,9 +61,19 @@ public class Post
 		return null;
 	}
 
+	public List<Common.Action> getMessages(Integer id)
+	{
+		Deque<Common.Action> queue = messages.get(id);
+		List<Common.Action> ret = new ArrayList<Common.Action>(queue);
+		queue.clear();
+
+		return ret;
+	}
+
+
 	public boolean hasMessages(Integer id)
 	{
-		Deque<Message> deq = messages.get(id);
+		Deque<Common.Action> deq = messages.get(id);
 		if(deq != null && !deq.isEmpty())
 			return  true;
 		return false;
@@ -62,16 +85,18 @@ public class Post
 	 */
 	public void close(int id)
 	{
-		Deque<Message> deq = messages.get(id);
+		Deque<Common.Action> deq = messages.get(id);
 		if(deq != null)
 			messages.get(id).clear();
 		messages.remove(id);
 	}
 
-	public void sendTo(int id, Message message)
+	public void sendTo(int id, Common.Action message)
 	{
-		Deque<Message> deq = messages.get(id);
+		Deque<Common.Action> deq = messages.get(id);
 		if(deq != null)
 			deq.addFirst(message);
 	}
+
+
 }

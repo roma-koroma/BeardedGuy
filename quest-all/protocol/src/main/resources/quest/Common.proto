@@ -4,7 +4,7 @@
 package quest.protocol;
 
 option java_package = "quest.protocol";
-option java_outer_classname = "CommonMessages";
+option java_outer_classname = "Common";
 
 
 message Character
@@ -18,7 +18,6 @@ message Character
     optional int32 health = 4;
 
     optional Weapon weapon = 5;
-
 }
 
 message Weapon
@@ -48,10 +47,19 @@ message Action
 
     enum Type
     {
+        //Двигаться
         MOVE = 1;
+
+        //Атаковать
         ATTACK = 2;
+
+        //Кастовать заклинание
         CAST = 3;
+
+        //Войти
         ENTER = 4;
+
+        //Выйти
         EXIT = 5;
     }
 

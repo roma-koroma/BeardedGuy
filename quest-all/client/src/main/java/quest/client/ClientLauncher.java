@@ -10,8 +10,9 @@ import quest.client.model.RandomInputSource;
 import quest.client.network.DeltaHandler;
 import quest.client.network.FullHandler;
 import quest.client.network.Handler;
-import quest.protocol.ClientMessage;
-import quest.protocol.GameServerMessage;
+import quest.protocol.Client;
+import quest.protocol.Common;
+import quest.protocol.GameServer;
 import quest.protocol.LoginServerMessage;
 
 import java.io.IOException;
@@ -48,14 +49,15 @@ public class ClientLauncher
 	 */
 	private Deque<RandomInputSource.Event> inputEvents;
 
-	private Map<GameServerMessage.GameServerOperation.Type, Handler> operationRegistry;
-
 	private GameController gameController;
 
 	/**
 	 * Флаг о необходимости выключать систему.
 	 */
 	private boolean isShutdown;
+	private DeltaHandler deltaHandler;
+	private FullHandler fullHandler;
+	private boolean syncRequired = true;
 
 
 	public ClientLauncher(String name) throws IOException, InterruptedException
@@ -128,19 +130,18 @@ public class ClientLauncher
 
 	private void initRegistry()
 	{
-		this.operationRegistry = new EnumMap<GameServerMessage.GameServerOperation.Type, Handler>(GameServerMessage.GameServerOperation.Type.class);
-		operationRegistry.put(GameServerMessage.GameServerOperation.Type.DELTA, deltaHandler());
-		operationRegistry.put(GameServerMessage.GameServerOperation.Type.FULL, deltaHandler());
+		this.deltaHandler = deltaHandler();
+		this.fullHandler = fullHandler();
 	}
 
-	private Handler fullHandler()
+	private FullHandler fullHandler()
 	{
 		FullHandler handler = new FullHandler();
 		handler.setGameController(gameController);
 		return handler;
 	}
 
-	private Handler deltaHandler()
+	private DeltaHandler deltaHandler()
 	{
 		DeltaHandler handler = new DeltaHandler();
 		handler.setGameController(gameController);
@@ -169,13 +170,7 @@ public class ClientLauncher
 		}
 		else
 		{
-			byte[] input = ClientMessage
-				.ClientOperation.newBuilder()
-				.setClientId(gameController.getMainGuy().getId())
-				.setOperation(ClientMessage
-				.ClientOperation.Type.INPUT)
-				.setBodyMessage(getInput())
-				.build().toByteArray();
+			byte[] input = getInput().toByteArray();
 			writeBuffer.putInt(0, input.length);
 			writeBuffer.position(4);
 			writeBuffer.put(input);
@@ -193,33 +188,40 @@ public class ClientLauncher
 	private ByteString getInput()
 	{
 
-		ClientMessage.InputOperation.Builder builder = ClientMessage.InputOperation.newBuilder();
+		Client.Operation.Builder opBuilder = Client.Operation.newBuilder();
 
 		while(inputEvents.size() > 0)
 		{
+			Common.Action.Builder action = Common.Action.newBuilder();
+
 			RandomInputSource.Event event = inputEvents.removeLast();
-			ClientMessage.InputOperation.Input input;
+
+			//Считаем, что единственный ввод — это передвижение
+			action.setType(Common.Action.Type.MOVE);
+
+			Client.Operation.Move.Builder move = Client.Operation.Move.newBuilder();
 			switch (event)
 			{
 				case UP_KEY:
-					input = ClientMessage.InputOperation.Input.UP_KEY;
+					move.setDirection(Client.Operation.Move.Direction.UP);
 					break;
 				case DOWN_KEY:
-					input = ClientMessage.InputOperation.Input.DOWN_KEY;
+					move.setDirection(Client.Operation.Move.Direction.DOWN);
 					break;
 				case LEFT_KEY:
-					input = ClientMessage.InputOperation.Input.LEFT_KEY;
+					move.setDirection(Client.Operation.Move.Direction.LEFT);
 					break;
 				case RIGHT_KEY:
-					input = ClientMessage.InputOperation.Input.RIGHT_KEY;
+					move.setDirection(Client.Operation.Move.Direction.RIGHT);
 					break;
-				default:
-					input = ClientMessage.InputOperation.Input.NONE;
 			}
-			builder.addInput(input);
+			opBuilder
+				.addAction
+					(action.setMessage(move.build().toByteString()));
+
 		}
 
-		return builder.build().toByteString();
+		return opBuilder.build().toByteString();
 	}
 
 	private void read(SelectionKey key) throws IOException
@@ -254,19 +256,30 @@ public class ClientLauncher
 						);
 						guy.setId(result.getUser().getId());
 						gameController.setMainGuy(guy);
+
 					}
-				} else
+				}
+				//Синхронизируем описание
+				if(syncRequired)
+				{
+					int size = readBuffer.getInt(0);
+
+					GameServer.FullState fullState = GameServer
+						.FullState
+						.parseFrom(
+							ByteString.copyFrom(readBuffer.array(), 4, size)
+						);
+					fullHandler().handle(fullState);
+					syncRequired = false;
+				}
+				else
 				{
 					int size = readBuffer.getInt(0);
 
 					//read cooridantes;
-					GameServerMessage.GameServerOperation op = GameServerMessage.GameServerOperation
+					GameServer.DeltaState op = GameServer.DeltaState
 						.parseFrom(ByteString.copyFrom(readBuffer.array(), 4, size));
-					Handler handler = operationRegistry.get(op.getOperation());
-					if (handler != null)
-					{
-						handler.handle(op.getBodyMessage());
-					}
+						deltaHandler.handle(op);
 				}
 			}
 			else
@@ -284,7 +297,6 @@ public class ClientLauncher
 			key.channel().close();
 			return;
 		}
-
 	}
 
 
@@ -311,7 +323,6 @@ public class ClientLauncher
         return channel;
 
     }
-
 
     public static void main(String...args) throws IOException, InterruptedException
     {

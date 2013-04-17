@@ -2,21 +2,20 @@ package quest.server.network;
 
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
-import com.google.protobuf.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import quest.client.model.BeardedGuy;
-import quest.protocol.ClientMessage;
-import quest.protocol.CommonMessages;
-import quest.protocol.GameServerMessage;
+import quest.client.model.Point;
+import quest.protocol.Client;
+import quest.protocol.Common;
 import quest.server.dao.InMemoryGameController;
 
-import static quest.client.util.SerializationUtil.serializeGuy;
+import static quest.client.util.SerializationUtil.serializeAction;
+import static quest.server.SerializationUtil.serializeMove;
 
 /**
  * @author Roman K.
  */
-public class InputHandler implements Handler
+public class InputHandler
 {
 
 	/**
@@ -26,34 +25,37 @@ public class InputHandler implements Handler
 
 	private InMemoryGameController gameController;
 
-	@Override
-	public void handle(int clientId, ByteString bodyMessage, Post post)
+	public void handle(Integer id, Client.Operation op, Post post)
 	{
-		ClientMessage.InputOperation op = parseMessage(bodyMessage);
 
-		if(op.getInputCount() > 0)
+		for (Common.Action action : op.getActionList())
 		{
-			//Сейчас обрабатывается только первая кнопка
-			BeardedGuy guy = gameController.moveById(clientId, op.getInput(0));
+			switch (action.getType())
+			{
 
-			if( guy != null)
-				post.broadcast(serializeGameState(serializeGuy(guy)));
+				case MOVE:
+					Client.Operation.Move moveOp = parseMoveMessage(action.getMessage());
+					Point point = gameController.move(id, moveOp.getDirection());
+					post.broadcast(serializeAction(Common.Action.Type.MOVE, serializeMove(id, point).toByteString()));
+
+					break;
+				case ATTACK:
+					break;
+				case CAST:
+					break;
+				case ENTER:
+					break;
+				case EXIT:
+					break;
+			}
 		}
-
 	}
 
-	private Message serializeGameState(CommonMessages.User user)
-	{
-		return GameServerMessage.GameStateOperation.newBuilder()
-		.addUser(user)
-		.build();
-	}
-
-	private ClientMessage.InputOperation parseMessage(ByteString message)
+	private Client.Operation.Move parseMoveMessage(ByteString message)
 	{
 		try
 		{
-			return ClientMessage.InputOperation.parseFrom(message);
+			return Client.Operation.Move.parseFrom(message);
 		}
 		catch (InvalidProtocolBufferException e)
 		{
@@ -61,8 +63,12 @@ public class InputHandler implements Handler
 		}
 	}
 
+
+
+
 	public void setGameController(InMemoryGameController gameController)
 	{
 		this.gameController = gameController;
 	}
+
 }

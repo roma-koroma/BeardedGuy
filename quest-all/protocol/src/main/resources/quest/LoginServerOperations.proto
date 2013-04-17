@@ -2,20 +2,22 @@
  * @author Roman Koretskiy
  * @since 
  */
-package quest;
+package quest.protocol;
 
 option java_package = "quest.protocol";
 option java_outer_classname = "LoginServerMessage";
 
 import "src/main/resources/quest/Common.proto";
 
-message AuthOperation {
+message AuthOperation
+{
     required string login = 1;
     required string password = 2;
 }
 
-message AuthOperationResult {
+message AuthOperationResult
+{
     required bool isSuccess = 1;
-    optional User user = 2;
+    optional Character user = 2;
     //    repeated Shard shard = 3;
 }

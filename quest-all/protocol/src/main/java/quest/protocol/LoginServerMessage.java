@@ -39,12 +39,12 @@ public final class LoginServerMessage {
     
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return quest.protocol.LoginServerMessage.internal_static_quest_AuthOperation_descriptor;
+      return quest.protocol.LoginServerMessage.internal_static_quest_protocol_AuthOperation_descriptor;
     }
     
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return quest.protocol.LoginServerMessage.internal_static_quest_AuthOperation_fieldAccessorTable;
+      return quest.protocol.LoginServerMessage.internal_static_quest_protocol_AuthOperation_fieldAccessorTable;
     }
     
     private int bitField0_;
@@ -256,12 +256,12 @@ public final class LoginServerMessage {
        implements quest.protocol.LoginServerMessage.AuthOperationOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return quest.protocol.LoginServerMessage.internal_static_quest_AuthOperation_descriptor;
+        return quest.protocol.LoginServerMessage.internal_static_quest_protocol_AuthOperation_descriptor;
       }
       
       protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return quest.protocol.LoginServerMessage.internal_static_quest_AuthOperation_fieldAccessorTable;
+        return quest.protocol.LoginServerMessage.internal_static_quest_protocol_AuthOperation_fieldAccessorTable;
       }
       
       // Construct using quest.protocol.LoginServerMessage.AuthOperation.newBuilder()
@@ -482,7 +482,7 @@ public final class LoginServerMessage {
         onChanged();
       }
       
-      // @@protoc_insertion_point(builder_scope:quest.AuthOperation)
+      // @@protoc_insertion_point(builder_scope:quest.protocol.AuthOperation)
     }
     
     static {
@@ -490,7 +490,7 @@ public final class LoginServerMessage {
       defaultInstance.initFields();
     }
     
-    // @@protoc_insertion_point(class_scope:quest.AuthOperation)
+    // @@protoc_insertion_point(class_scope:quest.protocol.AuthOperation)
   }
   
   public interface AuthOperationResultOrBuilder
@@ -500,10 +500,10 @@ public final class LoginServerMessage {
     boolean hasIsSuccess();
     boolean getIsSuccess();
     
-    // optional .User user = 2;
+    // optional .quest.protocol.Character user = 2;
     boolean hasUser();
-    quest.protocol.CommonMessages.User getUser();
-    quest.protocol.CommonMessages.UserOrBuilder getUserOrBuilder();
+    quest.protocol.Common.Character getUser();
+    quest.protocol.Common.CharacterOrBuilder getUserOrBuilder();
   }
   public static final class AuthOperationResult extends
       com.google.protobuf.GeneratedMessage
@@ -525,12 +525,12 @@ public final class LoginServerMessage {
     
     public static final com.google.protobuf.Descriptors.Descriptor
         getDescriptor() {
-      return quest.protocol.LoginServerMessage.internal_static_quest_AuthOperationResult_descriptor;
+      return quest.protocol.LoginServerMessage.internal_static_quest_protocol_AuthOperationResult_descriptor;
     }
     
     protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
         internalGetFieldAccessorTable() {
-      return quest.protocol.LoginServerMessage.internal_static_quest_AuthOperationResult_fieldAccessorTable;
+      return quest.protocol.LoginServerMessage.internal_static_quest_protocol_AuthOperationResult_fieldAccessorTable;
     }
     
     private int bitField0_;
@@ -544,22 +544,22 @@ public final class LoginServerMessage {
       return isSuccess_;
     }
     
-    // optional .User user = 2;
+    // optional .quest.protocol.Character user = 2;
     public static final int USER_FIELD_NUMBER = 2;
-    private quest.protocol.CommonMessages.User user_;
+    private quest.protocol.Common.Character user_;
     public boolean hasUser() {
       return ((bitField0_ & 0x00000002) == 0x00000002);
     }
-    public quest.protocol.CommonMessages.User getUser() {
+    public quest.protocol.Common.Character getUser() {
       return user_;
     }
-    public quest.protocol.CommonMessages.UserOrBuilder getUserOrBuilder() {
+    public quest.protocol.Common.CharacterOrBuilder getUserOrBuilder() {
       return user_;
     }
     
     private void initFields() {
       isSuccess_ = false;
-      user_ = quest.protocol.CommonMessages.User.getDefaultInstance();
+      user_ = quest.protocol.Common.Character.getDefaultInstance();
     }
     private byte memoizedIsInitialized = -1;
     public final boolean isInitialized() {
@@ -703,12 +703,12 @@ public final class LoginServerMessage {
        implements quest.protocol.LoginServerMessage.AuthOperationResultOrBuilder {
       public static final com.google.protobuf.Descriptors.Descriptor
           getDescriptor() {
-        return quest.protocol.LoginServerMessage.internal_static_quest_AuthOperationResult_descriptor;
+        return quest.protocol.LoginServerMessage.internal_static_quest_protocol_AuthOperationResult_descriptor;
       }
       
       protected com.google.protobuf.GeneratedMessage.FieldAccessorTable
           internalGetFieldAccessorTable() {
-        return quest.protocol.LoginServerMessage.internal_static_quest_AuthOperationResult_fieldAccessorTable;
+        return quest.protocol.LoginServerMessage.internal_static_quest_protocol_AuthOperationResult_fieldAccessorTable;
       }
       
       // Construct using quest.protocol.LoginServerMessage.AuthOperationResult.newBuilder()
@@ -734,7 +734,7 @@ public final class LoginServerMessage {
         isSuccess_ = false;
         bitField0_ = (bitField0_ & ~0x00000001);
         if (userBuilder_ == null) {
-          user_ = quest.protocol.CommonMessages.User.getDefaultInstance();
+          user_ = quest.protocol.Common.Character.getDefaultInstance();
         } else {
           userBuilder_.clear();
         }
@@ -858,7 +858,7 @@ public final class LoginServerMessage {
               break;
             }
             case 18: {
-              quest.protocol.CommonMessages.User.Builder subBuilder = quest.protocol.CommonMessages.User.newBuilder();
+              quest.protocol.Common.Character.Builder subBuilder = quest.protocol.Common.Character.newBuilder();
               if (hasUser()) {
                 subBuilder.mergeFrom(getUser());
               }
@@ -893,21 +893,21 @@ public final class LoginServerMessage {
         return this;
       }
       
-      // optional .User user = 2;
-      private quest.protocol.CommonMessages.User user_ = quest.protocol.CommonMessages.User.getDefaultInstance();
+      // optional .quest.protocol.Character user = 2;
+      private quest.protocol.Common.Character user_ = quest.protocol.Common.Character.getDefaultInstance();
       private com.google.protobuf.SingleFieldBuilder<
-          quest.protocol.CommonMessages.User, quest.protocol.CommonMessages.User.Builder, quest.protocol.CommonMessages.UserOrBuilder> userBuilder_;
+          quest.protocol.Common.Character, quest.protocol.Common.Character.Builder, quest.protocol.Common.CharacterOrBuilder> userBuilder_;
       public boolean hasUser() {
         return ((bitField0_ & 0x00000002) == 0x00000002);
       }
-      public quest.protocol.CommonMessages.User getUser() {
+      public quest.protocol.Common.Character getUser() {
         if (userBuilder_ == null) {
           return user_;
         } else {
           return userBuilder_.getMessage();
         }
       }
-      public Builder setUser(quest.protocol.CommonMessages.User value) {
+      public Builder setUser(quest.protocol.Common.Character value) {
         if (userBuilder_ == null) {
           if (value == null) {
             throw new NullPointerException();
@@ -921,7 +921,7 @@ public final class LoginServerMessage {
         return this;
       }
       public Builder setUser(
-          quest.protocol.CommonMessages.User.Builder builderForValue) {
+          quest.protocol.Common.Character.Builder builderForValue) {
         if (userBuilder_ == null) {
           user_ = builderForValue.build();
           onChanged();
@@ -931,12 +931,12 @@ public final class LoginServerMessage {
         bitField0_ |= 0x00000002;
         return this;
       }
-      public Builder mergeUser(quest.protocol.CommonMessages.User value) {
+      public Builder mergeUser(quest.protocol.Common.Character value) {
         if (userBuilder_ == null) {
           if (((bitField0_ & 0x00000002) == 0x00000002) &&
-              user_ != quest.protocol.CommonMessages.User.getDefaultInstance()) {
+              user_ != quest.protocol.Common.Character.getDefaultInstance()) {
             user_ =
-              quest.protocol.CommonMessages.User.newBuilder(user_).mergeFrom(value).buildPartial();
+              quest.protocol.Common.Character.newBuilder(user_).mergeFrom(value).buildPartial();
           } else {
             user_ = value;
           }
@@ -949,7 +949,7 @@ public final class LoginServerMessage {
       }
       public Builder clearUser() {
         if (userBuilder_ == null) {
-          user_ = quest.protocol.CommonMessages.User.getDefaultInstance();
+          user_ = quest.protocol.Common.Character.getDefaultInstance();
           onChanged();
         } else {
           userBuilder_.clear();
@@ -957,12 +957,12 @@ public final class LoginServerMessage {
         bitField0_ = (bitField0_ & ~0x00000002);
         return this;
       }
-      public quest.protocol.CommonMessages.User.Builder getUserBuilder() {
+      public quest.protocol.Common.Character.Builder getUserBuilder() {
         bitField0_ |= 0x00000002;
         onChanged();
         return getUserFieldBuilder().getBuilder();
       }
-      public quest.protocol.CommonMessages.UserOrBuilder getUserOrBuilder() {
+      public quest.protocol.Common.CharacterOrBuilder getUserOrBuilder() {
         if (userBuilder_ != null) {
           return userBuilder_.getMessageOrBuilder();
         } else {
@@ -970,11 +970,11 @@ public final class LoginServerMessage {
         }
       }
       private com.google.protobuf.SingleFieldBuilder<
-          quest.protocol.CommonMessages.User, quest.protocol.CommonMessages.User.Builder, quest.protocol.CommonMessages.UserOrBuilder> 
+          quest.protocol.Common.Character, quest.protocol.Common.Character.Builder, quest.protocol.Common.CharacterOrBuilder> 
           getUserFieldBuilder() {
         if (userBuilder_ == null) {
           userBuilder_ = new com.google.protobuf.SingleFieldBuilder<
-              quest.protocol.CommonMessages.User, quest.protocol.CommonMessages.User.Builder, quest.protocol.CommonMessages.UserOrBuilder>(
+              quest.protocol.Common.Character, quest.protocol.Common.Character.Builder, quest.protocol.Common.CharacterOrBuilder>(
                   user_,
                   getParentForChildren(),
                   isClean());
@@ -983,7 +983,7 @@ public final class LoginServerMessage {
         return userBuilder_;
       }
       
-      // @@protoc_insertion_point(builder_scope:quest.AuthOperationResult)
+      // @@protoc_insertion_point(builder_scope:quest.protocol.AuthOperationResult)
     }
     
     static {
@@ -991,19 +991,19 @@ public final class LoginServerMessage {
       defaultInstance.initFields();
     }
     
-    // @@protoc_insertion_point(class_scope:quest.AuthOperationResult)
+    // @@protoc_insertion_point(class_scope:quest.protocol.AuthOperationResult)
   }
   
   private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_quest_AuthOperation_descriptor;
+    internal_static_quest_protocol_AuthOperation_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_quest_AuthOperation_fieldAccessorTable;
+      internal_static_quest_protocol_AuthOperation_fieldAccessorTable;
   private static com.google.protobuf.Descriptors.Descriptor
-    internal_static_quest_AuthOperationResult_descriptor;
+    internal_static_quest_protocol_AuthOperationResult_descriptor;
   private static
     com.google.protobuf.GeneratedMessage.FieldAccessorTable
-      internal_static_quest_AuthOperationResult_fieldAccessorTable;
+      internal_static_quest_protocol_AuthOperationResult_fieldAccessorTable;
   
   public static com.google.protobuf.Descriptors.FileDescriptor
       getDescriptor() {
@@ -1014,31 +1014,31 @@ public final class LoginServerMessage {
   static {
     java.lang.String[] descriptorData = {
       "\n4src/main/resources/quest/LoginServerOp" +
-      "erations.proto\022\005quest\032%src/main/resource" +
-      "s/quest/Common.proto\"0\n\rAuthOperation\022\r\n" +
-      "\005login\030\001 \002(\t\022\020\n\010password\030\002 \002(\t\"=\n\023AuthOp" +
-      "erationResult\022\021\n\tisSuccess\030\001 \002(\010\022\023\n\004user" +
-      "\030\002 \001(\0132\005.UserB$\n\016quest.protocolB\022LoginSe" +
-      "rverMessage"
+      "erations.proto\022\016quest.protocol\032%src/main" +
+      "/resources/quest/Common.proto\"0\n\rAuthOpe" +
+      "ration\022\r\n\005login\030\001 \002(\t\022\020\n\010password\030\002 \002(\t\"" +
+      "Q\n\023AuthOperationResult\022\021\n\tisSuccess\030\001 \002(" +
+      "\010\022\'\n\004user\030\002 \001(\0132\031.quest.protocol.Charact" +
+      "erB$\n\016quest.protocolB\022LoginServerMessage"
     };
     com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner assigner =
       new com.google.protobuf.Descriptors.FileDescriptor.InternalDescriptorAssigner() {
         public com.google.protobuf.ExtensionRegistry assignDescriptors(
             com.google.protobuf.Descriptors.FileDescriptor root) {
           descriptor = root;
-          internal_static_quest_AuthOperation_descriptor =
+          internal_static_quest_protocol_AuthOperation_descriptor =
             getDescriptor().getMessageTypes().get(0);
-          internal_static_quest_AuthOperation_fieldAccessorTable = new
+          internal_static_quest_protocol_AuthOperation_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_quest_AuthOperation_descriptor,
+              internal_static_quest_protocol_AuthOperation_descriptor,
               new java.lang.String[] { "Login", "Password", },
               quest.protocol.LoginServerMessage.AuthOperation.class,
               quest.protocol.LoginServerMessage.AuthOperation.Builder.class);
-          internal_static_quest_AuthOperationResult_descriptor =
+          internal_static_quest_protocol_AuthOperationResult_descriptor =
             getDescriptor().getMessageTypes().get(1);
-          internal_static_quest_AuthOperationResult_fieldAccessorTable = new
+          internal_static_quest_protocol_AuthOperationResult_fieldAccessorTable = new
             com.google.protobuf.GeneratedMessage.FieldAccessorTable(
-              internal_static_quest_AuthOperationResult_descriptor,
+              internal_static_quest_protocol_AuthOperationResult_descriptor,
               new java.lang.String[] { "IsSuccess", "User", },
               quest.protocol.LoginServerMessage.AuthOperationResult.class,
               quest.protocol.LoginServerMessage.AuthOperationResult.Builder.class);
@@ -1048,7 +1048,7 @@ public final class LoginServerMessage {
     com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
         new com.google.protobuf.Descriptors.FileDescriptor[] {
-          quest.protocol.CommonMessages.getDescriptor(),
+          quest.protocol.Common.getDescriptor(),
         }, assigner);
   }
   

@@ -5,15 +5,14 @@ import com.google.protobuf.InvalidProtocolBufferException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import quest.client.controller.GameController;
-import quest.protocol.CommonMessages;
-import quest.protocol.GameServerMessage;
+import quest.client.controller.GameControllerException;
+import quest.protocol.Common;
+import quest.protocol.GameServer;
 
 /**
- * User: Roman Koretskiy
- * Date: 01.04.13
- * Time: 23:43
+ * @author Roman Koretskiy
  */
-public class DeltaHandler implements Handler
+public class DeltaHandler implements Handler<GameServer.DeltaState>
 {
 
 	/**
@@ -23,21 +22,75 @@ public class DeltaHandler implements Handler
 	private GameController gameController;
 
 	@Override
-	public void handle(ByteString message)
+	public void handle(GameServer.DeltaState message)
 	{
-		GameServerMessage.GameStateOperation operation = parse(message);
-
-		for(CommonMessages.User user : operation.getUserList())
+		for(Common.Action action : message.getActionList())
 		{
-			gameController.updateGuyByPB(user);
+			switch (action.getType())
+			{
+				case MOVE:
+					GameServer.DeltaState.Move moveOp = parseMoveMessage(action.getMessage());
+					gameController.move(moveOp.getEntityId(), moveOp.getNewPosition());
+					break;
+
+				case ATTACK:
+					break;
+				case CAST:
+					break;
+				case ENTER:
+					GameServer.DeltaState.Enter enterOp = parseEnterMessage(action.getMessage());
+					for (Common.Character character : enterOp.getEntityList())
+					{
+						try
+						{
+							gameController.addEntity(character);
+						}
+						catch (GameControllerException e)
+						{
+							logger.error("",e);
+							System.exit(1);
+						}
+					}
+
+					break;
+				case EXIT:
+					GameServer.DeltaState.Exit exitOp = parseExitMessage(action.getMessage());
+					for (Integer character : exitOp.getEntityIdList())
+					{
+						gameController.removeEntity(character);
+					}
+					break;
+			}
 		}
 	}
 
-	private GameServerMessage.GameStateOperation parse(ByteString message)
+	private GameServer.DeltaState.Exit parseExitMessage(ByteString message)
 	{
 		try
 		{
-			return GameServerMessage.GameStateOperation.parseFrom(message);
+			return GameServer.DeltaState.Exit.parseFrom(message);
+		}
+		catch (InvalidProtocolBufferException e)
+		{
+			throw new RuntimeException();
+		}	}
+
+	private GameServer.DeltaState.Enter parseEnterMessage(ByteString message)
+	{
+		try
+		{
+			return GameServer.DeltaState.Enter.parseFrom(message);
+		}
+		catch (InvalidProtocolBufferException e)
+		{
+			throw new RuntimeException();
+		}	}
+
+	private GameServer.DeltaState.Move parseMoveMessage(ByteString message)
+	{
+		try
+		{
+			return GameServer.DeltaState.Move.parseFrom(message);
 		}
 		catch (InvalidProtocolBufferException e)
 		{

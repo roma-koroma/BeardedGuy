@@ -21,6 +21,7 @@ public class BeardedGuy
 	private int id;
 	private boolean online;
 	private boolean isOnline;
+	private int health;
 
 	public BeardedGuy(String name, Point position)
     {
@@ -76,5 +77,15 @@ public class BeardedGuy
 	public void setIsOnline(boolean online)
 	{
 		isOnline = online;
+	}
+
+	public void setHealth(int health)
+	{
+		this.health = health;
+	}
+
+	public int getHealth()
+	{
+		return health;
 	}
 }

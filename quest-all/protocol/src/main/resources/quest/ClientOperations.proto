@@ -4,14 +4,14 @@
 package quest.protocol;
 
 option java_package = "quest.protocol";
-option java_outer_classname = "ClientMessage";
+option java_outer_classname = "Client";
 
 import "src/main/resources/quest/Common.proto";
 
 //клиент и его реализация действий.
-message Client
+message Operation
 {
-    repeated Action operation = 1;
+    repeated Action action = 1;
 
     message Move
     {
@@ -28,7 +28,7 @@ message Client
 
     message Attack
     {
-        required targetId = 1;
+        required uint32 targetId = 1;
     }
 
     message Cast

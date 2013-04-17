@@ -45,8 +45,8 @@
                                 <exec failonerror="true" executable="/usr/local/bin/protoc">
                                     <arg value="${src.dir}/${common.proto.file}"/>
                                     <arg value="${src.dir}/${client.proto.file}"/>
-                                    <arg value="${src.dir}/${login.proto.file}"/>
                                     <arg value="${src.dir}/${game.proto.file}"/>
+                                    <arg value="${src.dir}/${login.proto.file}"/>
 
                                     <arg value="--java_out=${out.dir}"/>
                                 </exec>

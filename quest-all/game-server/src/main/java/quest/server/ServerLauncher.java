@@ -5,12 +5,11 @@ import com.google.protobuf.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import quest.client.model.BeardedGuy;
-import quest.protocol.ClientMessage;
-import quest.protocol.CommonMessages;
-import quest.protocol.GameServerMessage;
+import quest.protocol.Client;
+import quest.protocol.Common;
+import quest.protocol.GameServer;
 import quest.protocol.LoginServerMessage;
 import quest.server.dao.InMemoryGameController;
-import quest.server.network.Handler;
 import quest.server.network.InputHandler;
 import quest.server.network.Post;
 
@@ -20,7 +19,10 @@ import java.nio.ByteBuffer;
 import java.nio.channels.*;
 import java.util.*;
 
+import static quest.client.util.SerializationUtil.serializeAction;
 import static quest.client.util.SerializationUtil.serializeGuy;
+import static quest.server.SerializationUtil.serializeEnter;
+import static quest.server.SerializationUtil.serializeExit;
 
 /**
  * @author Roman Koretskiy
@@ -40,13 +42,12 @@ public class ServerLauncher
 
 	Map<SelectionKey, Integer> keyToId;
 
-	Map<ClientMessage.ClientOperation.Type, Handler> operationRegistry;
-
 	/**
 	 * Ящики сообщений клиентов.
 	 */
 	private Post post;
 	private InMemoryGameController gameController;
+	private InputHandler inputHandler;
 
 	public ServerLauncher() throws IOException, InterruptedException
     {
@@ -113,12 +114,10 @@ public class ServerLauncher
 
 	private void initRegistry()
 	{
-		this.operationRegistry =
-			new EnumMap<ClientMessage.ClientOperation.Type, Handler>(ClientMessage.ClientOperation.Type.class);
-		operationRegistry.put(ClientMessage.ClientOperation.Type.INPUT, inputHandler());
+		this.inputHandler = inputHandler();
 	}
 
-	private Handler inputHandler()
+	private InputHandler inputHandler()
 	{
 		InputHandler ret =new InputHandler();
 		ret.setGameController(gameController);
@@ -177,20 +176,23 @@ public class ServerLauncher
 
 					writeMessage(ch, result);
 
-					post.sendTo(guy.getId(), gameState(gameController.getFullModel()));
-					post.broadcast(serializeGuy(guy));
+					//отправка полной модели также происходит в спец. режиме
+					//
+					writeMessage(ch, fullGameState(gameController.getFullModel()).toByteArray());
+
+					//а информирование
+					//TODO в рассылку должны попадать только action!
+					post.broadcastWithExcluding(serializeAction(Common.Action.Type.ENTER, serializeEnter(guy)), guy.getId());
 
 					key.interestOps(SelectionKey.OP_READ);
-				} else
+				}
+
+				else
 				{
-					ClientMessage.ClientOperation op =
-						ClientMessage.ClientOperation
+					Client.Operation op =
+						Client.Operation
 							.parseFrom(ByteString.copyFrom(buffer.array(), 4, size));
-					Handler handler = operationRegistry.get((op.getOperation()));
-					if (handler != null)
-					{
-						handler.handle(op.getClientId(), op.getBodyMessage(), post);
-					}
+					inputHandler.handle(id, op, post);
 				}
 			}
 			else
@@ -206,14 +208,16 @@ public class ServerLauncher
 		}
 	}
 
-	private List<CommonMessages.User> gameState(Collection<BeardedGuy> fullModel)
+	private GameServer.FullState fullGameState(Collection<BeardedGuy> fullModel)
 	{
-		List<CommonMessages.User> ret =  new ArrayList<CommonMessages.User>();
+		GameServer.FullState.Builder retBuilder = GameServer.FullState.newBuilder();
+
 		for(BeardedGuy guy : fullModel)
 		{
-			ret.add(serializeGuy(guy));
+			retBuilder.addUser(serializeGuy(guy));
 		}
-		return ret;
+
+		return retBuilder.build();
 	}
 
 	private void writeMessage(SocketChannel ch, byte[] result) throws IOException
@@ -239,7 +243,7 @@ public class ServerLauncher
 
 			BeardedGuy guy = gameController.close(id);
 			post.close(id);
-			post.broadcast(serializeGuy(guy));
+			post.broadcast(serializeAction(Common.Action.Type.EXIT, serializeExit(guy.getId())));
 			key.cancel();
 			key.channel().close();
 		}
@@ -256,11 +260,11 @@ public class ServerLauncher
 		{
 			//TODO отправить все сообщения сразу.
 
-			Message message = post.getMessage(id);
-			if(message == null)
+			List<Common.Action> messages = post.getMessages(id);
+			if(messages == null || messages.isEmpty())
 				return;
 
-			byte[] msg = wrap(message, GameServerMessage.GameServerOperation.Type.DELTA);
+			byte[] msg = wrapDelta(messages);
 
 			SocketChannel ch = (SocketChannel) key.channel();
 			writeMessage(ch, msg);
@@ -272,13 +276,9 @@ public class ServerLauncher
 
 	}
 
-	private byte[] wrap(Message message, GameServerMessage.GameServerOperation.Type type)
+	private byte[] wrapDelta(List<Common.Action> messages)
 	{
-		return GameServerMessage.GameServerOperation
-			.newBuilder()
-			.setOperation(type)
-			.setBodyMessage(message.toByteString())
-			.build().toByteArray();
+		return GameServer.DeltaState.newBuilder().addAllAction(messages).build().toByteArray();
 	}
 
 	public static void main(String...args) throws IOException, InterruptedException

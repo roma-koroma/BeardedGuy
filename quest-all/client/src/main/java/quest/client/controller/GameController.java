@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import quest.client.model.BeardedGuy;
 import quest.client.model.Point;
-import quest.protocol.CommonMessages;
+import quest.protocol.Common;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,42 +30,6 @@ public class GameController
 		this.guys = new HashMap<Integer, BeardedGuy>();
 	}
 
-	/**
-	 * Обновить положение чувака по сообщению PB.
-	 * На данный момент мужик:
-	 * — удаляется,
-	 * — обновляются координаты,
-	 * — создается новый.
-	 * @param user
-	 */
-	public void updateGuyByPB(CommonMessages.User user)
-	{
-		BeardedGuy guy = user.getId() == mainGuy.getId() ? mainGuy : this.guys.get(user.getId());
-
-		if (!user.getIsOnline())
-		{
-			BeardedGuy removedGuy = guys.remove(user.getId());
-			logger.info("Remove guy {}", removedGuy.getName());
-			return;
-		}
-
-		if(guy != null)
-		{
-			logger.info("{} move from [{},{}] to [{},{}]",
-				new Object[]{
-					isMain(guy) ? "I" : guy.getName(),
-					guy.getPosition().getX(),
-					guy.getPosition().getY(),
-					user.getPosition().getX(),
-					user.getPosition().getY()
-				});
-			guy.setPosition(new Point(user.getPosition().getX(), user.getPosition().getY()));
-		}
-		else
-		{
-			newGuy(deserializeGuy(user));
-		}
-	}
 
 	private boolean isMain(BeardedGuy guy)
 	{
@@ -86,5 +50,45 @@ public class GameController
 	public void setMainGuy(BeardedGuy mainGuy)
 	{
 		this.mainGuy = mainGuy;
+	}
+
+	public void move(int entityId, Common.Point newPosition)
+	{
+		BeardedGuy guy = entityId == mainGuy.getId() ? mainGuy : this.guys.get(entityId);
+
+		logger.info("{} move from [{},{}] to [{},{}]",
+			new Object[]{
+				isMain(guy) ? "I" : guy.getName(),
+				guy.getPosition().getX(),
+				guy.getPosition().getY(),
+				newPosition.getX(),
+				newPosition.getY()
+			});
+		guy.setPosition(new Point(newPosition.getX(), newPosition.getY()));
+	}
+
+	public void addEntity(Common.Character c) throws GameControllerException
+	{
+		BeardedGuy newGuy = deserializeGuy(c);
+
+		//cтранный случай, которого не должно быть
+		if(mainGuy == null)
+		{
+			mainGuy = newGuy;
+			logger.error("Синхронизация до получения информации аутентификации.");
+		}
+		else if(isMain(newGuy))
+		{
+			throw new GameControllerException("Появилась сущность с таким же идентификатором, как и у нас"+ newGuy.getId());
+		}
+
+		this.guys.put(newGuy.getId(), newGuy);
+	}
+
+	public void removeEntity(Integer id)
+	{
+		BeardedGuy guy = this.guys.remove(id);
+		logger.info("Remove guy {}", guy.getName());
+
 	}
 }

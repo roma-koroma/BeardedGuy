@@ -1,13 +1,12 @@
 package quest.client.network;
 
 import com.google.protobuf.ByteString;
+import com.google.protobuf.Message;
 
 /**
- * User: Roman Koretskiy
- * Date: 01.04.13
- * Time: 23:35
+ * @author Roman Koretskiy
  */
-public interface Handler
+public interface Handler<T extends Message>
 {
-	void handle(ByteString message);
+	void handle(T message);
 }

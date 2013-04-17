@@ -4,7 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import quest.client.model.BeardedGuy;
 import quest.client.model.Point;
-import quest.protocol.ClientMessage;
+import quest.protocol.Client;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -14,7 +14,7 @@ import java.util.Map;
  * Реализация контроллера, который все держит в памяти
  * @author Roman K.
  */
-public class InMemoryGameController implements GameController
+public class InMemoryGameController
 {
 
 	/**
@@ -69,34 +69,35 @@ public class InMemoryGameController implements GameController
 	}
 
 
-	public BeardedGuy moveById(int clientId, ClientMessage.InputOperation.Input input)
+	public Point move(Integer id, Client.Operation.Move.Direction direction)
 	{
-		BeardedGuy guy = idToGuy.get(clientId);
-		if(guy != null)
+		BeardedGuy guy = idToGuy.get(id);
+		if (guy != null)
 		{
-			move(guy, input);
+			move(guy, direction);
 		}
 
-		return guy;
+		return guy.getPosition();
 	}
 
-	private void move(BeardedGuy guy, ClientMessage.InputOperation.Input input)
+
+	private void move(BeardedGuy guy, Client.Operation.Move.Direction direction)
 	{
 		int oldX = guy.getPosition().getX();
 		int oldY = guy.getPosition().getY();
 
-		switch (input)
+		switch (direction)
 		{
-			case DOWN_KEY:
+			case DOWN:
 				move(guy, -1, 0);
 				break;
-			case UP_KEY:
+			case UP:
 				move(guy, 1, 0);
 				break;
-			case LEFT_KEY:
+			case LEFT:
 				move(guy, 0, -1);
 				break;
-			case RIGHT_KEY:
+			case RIGHT:
 				move(guy, 0, 1);
 				break;
 		}
@@ -104,7 +105,7 @@ public class InMemoryGameController implements GameController
 		logger.info("\"{}\" move {} from [{},{}] to [{},{}]",
 			new Object[]{
 				guy.getName(),
-				input.name(),
+				direction.name(),
 				oldX,
 				oldY,
 				guy.getPosition().getX(),
@@ -132,4 +133,5 @@ public class InMemoryGameController implements GameController
 	{
 		return idToGuy.values();
 	}
+
 }

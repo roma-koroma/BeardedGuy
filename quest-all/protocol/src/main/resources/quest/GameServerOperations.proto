@@ -1,28 +1,26 @@
 /**
  * @author Roman Koretskiy
  */
-package quest.client;
+package quest.protocol;
 
 option java_package = "quest.protocol";
-option java_outer_classname = "GameServerMessage";
+option java_outer_classname = "GameServer";
 
 import "src/main/resources/quest/Common.proto";
 
-message FullGameState
+message FullState
 {
     repeated Character user = 1;
 }
 
-message DeltaGameState
+message DeltaState
 {
-    //новые сущности
-    repeated Character addedEntities = 1;
+    //новые сущности попавшие в поле зрения
 
-    //удаленные сущности
-    repeated Character deletedEntities = 2;
+    //сущности, которых больше не видно.
 
     //список действий.
-    repeated Action action = 2;
+    repeated Action action = 3;
 
     message Move
     {
@@ -70,9 +68,24 @@ message DeltaGameState
 
         enum State
         {
+            //ослепление
             BLIND = 1;
+
+            //кровоточащая рана
             BLEED = 2;
         }
+    }
+
+    //Описывает всех, кто попал в поле видимости адресата.
+    message Enter
+    {
+        repeated Character entity = 1;
+    }
+
+    //Показывает всех, кто вышел за пределы видимости адресата
+    message Exit
+    {
+        repeated uint32 entityId = 2;
     }
 
 }
