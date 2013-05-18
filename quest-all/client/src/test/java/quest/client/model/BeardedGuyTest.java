@@ -3,8 +3,8 @@ package quest.client.model;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
+import quest.common.model.Point;
 
 import static org.testng.Assert.assertEquals;
 

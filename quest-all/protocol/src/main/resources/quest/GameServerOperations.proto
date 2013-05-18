@@ -10,14 +10,11 @@ import "src/main/resources/quest/Common.proto";
 
 message FullState
 {
-    repeated Character user = 1;
+    required Room room = 1;
 }
 
 message DeltaState
 {
-    //новые сущности попавшие в поле зрения
-
-    //сущности, которых больше не видно.
 
     //список действий.
     repeated Action action = 3;
@@ -29,6 +26,9 @@ message DeltaState
 
         //новая позиция
         required Point newPosition = 2;
+
+        //угол нормали плоскости тела
+        optional double angle = 3;
     }
 
     message Attack
@@ -64,15 +64,33 @@ message DeltaState
         optional uint32 damage = 5;
 
         //накладываемое состояние
-        optional State state = 6;
+        optional Effect effect = 6;
 
-        enum State
+        //Этап произнесения заклинания
+        optional State state = 7;
+
+        enum Effect
         {
             //ослепление
             BLIND = 1;
 
             //кровоточащая рана
             BLEED = 2;
+        }
+
+        enum State
+        {
+            //начато произнесение заклинания
+            START = 1;
+
+            //закончено произнесение заклинания
+            STOP = 2;
+
+            //произносится мгновенно
+            INSTANT = 3;
+
+            //прервано
+            BREAK = 4;
         }
     }
 
@@ -90,3 +108,26 @@ message DeltaState
 
 }
 
+//Описание сервера.
+message Shard
+{
+    optional string ip = 1;
+    required uint32 port = 2;
+    optional string name = 3;
+    optional uint32 playersCount = 4;
+}
+
+//Состояние комнаты.
+message Room
+{
+    required uint32 id = 1;
+
+    //размер комнаты
+    required Point size = 2;
+
+    //список всех сущностей в комнате
+    repeated Character chars = 3;
+
+    //cписок всех происходящих сейчас действий
+    repeated Action action = 4;
+}

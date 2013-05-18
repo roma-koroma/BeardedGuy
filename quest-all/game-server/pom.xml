@@ -16,13 +16,7 @@
 
         <dependency>
             <groupId>quest</groupId>
-            <artifactId>protocol</artifactId>
-            <version>1.0</version>
-        </dependency>
-
-        <dependency>
-            <groupId>quest</groupId>
-            <artifactId>client</artifactId>
+            <artifactId>common</artifactId>
             <version>1.0</version>
         </dependency>
 
@@ -61,13 +55,6 @@
             <groupId>cglib</groupId>
             <artifactId>cglib</artifactId>
             <version>2.2</version>
-        </dependency>
-
-        <!-- Сетевое взаимодействие-->
-        <dependency>
-            <groupId>io.netty</groupId>
-            <artifactId>netty</artifactId>
-            <version>3.5.7.Final</version>
         </dependency>
 
         <dependency>

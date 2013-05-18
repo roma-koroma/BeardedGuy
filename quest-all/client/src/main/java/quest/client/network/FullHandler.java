@@ -32,7 +32,9 @@ public class FullHandler implements Handler<GameServer.FullState>
 		{
 			try
 			{
-				gameController.addEntity(c);
+				logger.info("Sync char {}:{} in point [{},{}]",
+					new Object[]{c.getId(), c.getName(), c.getPosition().getX(), c.getPosition().getY()});
+				gameController.addEntity(c, true);
 			}
 			catch (GameControllerException e)
 			{

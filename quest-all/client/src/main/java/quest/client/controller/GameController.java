@@ -3,13 +3,13 @@ package quest.client.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import quest.client.model.BeardedGuy;
-import quest.client.model.Point;
+import quest.common.model.Point;
 import quest.protocol.Common;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import static quest.client.util.SerializationUtil.deserializeGuy;
+import static quest.common.util.SerializationUtil.deserializeGuy;
 
 /**
  * @author Roman Koretskiy
@@ -33,13 +33,7 @@ public class GameController
 
 	private boolean isMain(BeardedGuy guy)
 	{
-
 		return mainGuy != null && (guy.getId() == mainGuy.getId());
-	}
-
-	public void newGuy(BeardedGuy guy)
-	{
-		this.guys.put(guy.getId(), guy);
 	}
 
 	public BeardedGuy getMainGuy()
@@ -67,19 +61,17 @@ public class GameController
 		guy.setPosition(new Point(newPosition.getX(), newPosition.getY()));
 	}
 
-	public void addEntity(Common.Character c) throws GameControllerException
+	public void addEntity(Common.Character c, boolean isSync) throws GameControllerException
 	{
 		BeardedGuy newGuy = deserializeGuy(c);
 
-		//cтранный случай, которого не должно быть
 		if(mainGuy == null)
 		{
-			mainGuy = newGuy;
-			logger.error("Синхронизация до получения информации аутентификации.");
+			throw new GameControllerException("Ошибочная синхронизация до аутентификации");
 		}
-		else if(isMain(newGuy))
+		else if (!isSync && isMain(newGuy))
 		{
-			throw new GameControllerException("Появилась сущность с таким же идентификатором, как и у нас"+ newGuy.getId());
+			throw new GameControllerException("Появилась сущность с таким же идентификатором, как и у нас" + newGuy.getId());
 		}
 
 		this.guys.put(newGuy.getId(), newGuy);

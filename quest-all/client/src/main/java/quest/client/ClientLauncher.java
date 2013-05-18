@@ -4,12 +4,10 @@ import com.google.protobuf.ByteString;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import quest.client.controller.GameController;
-import quest.client.model.BeardedGuy;
-import quest.client.model.Point;
-import quest.client.model.RandomInputSource;
+import quest.client.model.*;
 import quest.client.network.DeltaHandler;
 import quest.client.network.FullHandler;
-import quest.client.network.Handler;
+import quest.common.model.Point;
 import quest.protocol.Client;
 import quest.protocol.Common;
 import quest.protocol.GameServer;
@@ -36,7 +34,7 @@ public class ClientLauncher
     public static final String HOST = "127.0.0.1";
     public static final int PORT = 8080;
 
-    public static final int BUFFER_SIZE = 256;
+    public static final int BUFFER_SIZE = 1024;
 
     private ByteBuffer readBuffer = ByteBuffer.allocate(BUFFER_SIZE);
     private ByteBuffer writeBuffer = ByteBuffer.allocate(BUFFER_SIZE);
@@ -47,7 +45,7 @@ public class ClientLauncher
 	/**
 	 * Очередь, в которую пишутся все события ввода.
 	 */
-	private Deque<RandomInputSource.Event> inputEvents;
+	private Deque<InputSource.Event> inputEvents;
 
 	private GameController gameController;
 
@@ -68,14 +66,15 @@ public class ClientLauncher
 
 		initRegistry();
 
-		inputEvents = new ArrayDeque<RandomInputSource.Event>();
+		inputEvents = new ArrayDeque<InputSource.Event>();
 
         SocketChannel channel = connect();
 
         Selector selector = Selector.open();
         channel.register(selector, SelectionKey.OP_CONNECT);
 
-        RandomInputSource source = new RandomInputSource();
+//        InputSource source = new StandInputSource();
+        InputSource source = new CycleInputSource();
 
         while (!isShutdown)
         {
@@ -83,16 +82,17 @@ public class ClientLauncher
             while (selector.select() > 0)
             {
                 source.tick();
-				for( RandomInputSource.Event event : source.getEvents())
+				while(source.eventCount() > 0)
 				{
-					inputEvents.addFirst(event);
+					inputEvents.addFirst(source.removeEvent());
 				}
 
                 Set<SelectionKey> readyKeys = selector.selectedKeys();
 
 				Iterator<SelectionKey> iter = readyKeys.iterator();
 
-                SelectionKey key;
+                SelectionKey key = null;
+				logger.info("start iterate over selection keys");
                 while (iter.hasNext())
                 {
                     key = iter.next();
@@ -122,7 +122,9 @@ public class ClientLauncher
 					}
 
                 }
-                Thread.sleep(500);
+				logger.info("interest ops : {}", key.interestOps());
+
+				Thread.sleep(500);
             }
 
         }
@@ -179,6 +181,15 @@ public class ClientLauncher
 		}
 		key.interestOps(SelectionKey.OP_READ);
 
+
+		try
+		{
+			Thread.sleep(1000);
+		}
+		catch (InterruptedException e)
+		{
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -194,7 +205,7 @@ public class ClientLauncher
 		{
 			Common.Action.Builder action = Common.Action.newBuilder();
 
-			RandomInputSource.Event event = inputEvents.removeLast();
+			InputSource.Event event = inputEvents.removeLast();
 
 			//Считаем, что единственный ввод — это передвижение
 			action.setType(Common.Action.Type.MOVE);
@@ -256,12 +267,16 @@ public class ClientLauncher
 						);
 						guy.setId(result.getUser().getId());
 						gameController.setMainGuy(guy);
+						logger.info("My name is {}:{}. I stay at [{},{}]",
+							new Object[]{guy.getId(), guy.getName(), guy.getPosition().getX(), guy.getPosition().getY()}
+						);
 
 					}
 				}
 				//Синхронизируем описание
-				if(syncRequired)
+				else if(syncRequired)
 				{
+					logger.warn("Receive sync info from server");
 					int size = readBuffer.getInt(0);
 
 					GameServer.FullState fullState = GameServer

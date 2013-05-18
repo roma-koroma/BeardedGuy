@@ -39,11 +39,14 @@ public class DeltaHandler implements Handler<GameServer.DeltaState>
 					break;
 				case ENTER:
 					GameServer.DeltaState.Enter enterOp = parseEnterMessage(action.getMessage());
-					for (Common.Character character : enterOp.getEntityList())
+					for (Common.Character c : enterOp.getEntityList())
 					{
 						try
 						{
-							gameController.addEntity(character);
+							logger.info("Add char {}:{} in point [{},{}]",
+								new Object[]{c.getId(), c.getName(), c.getPosition().getX(), c.getPosition().getY()});
+
+							gameController.addEntity(c, false);
 						}
 						catch (GameControllerException e)
 						{

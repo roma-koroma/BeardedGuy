@@ -2,6 +2,7 @@ package quest.client.model;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import quest.common.model.Point;
 
 /**
  * Player
@@ -22,6 +23,12 @@ public class BeardedGuy
 	private boolean online;
 	private boolean isOnline;
 	private int health;
+
+	/**
+	 * Скорость персонажа. Количество клеток в секунду.
+	 */
+	private double cellsPerMinute;
+	private Room room;
 
 	public BeardedGuy(String name, Point position)
     {
@@ -88,4 +95,15 @@ public class BeardedGuy
 	{
 		return health;
 	}
+
+	public void setCellsPerMinute(double cellsPerMinute)
+	{
+		this.cellsPerMinute = cellsPerMinute;
+	}
+
+	public double getCellsPerMinute()
+	{
+		return cellsPerMinute;
+	}
+
 }

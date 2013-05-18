@@ -7,9 +7,9 @@ import org.slf4j.LoggerFactory;
 import quest.client.model.Point;
 import quest.protocol.Client;
 import quest.protocol.Common;
-import quest.server.dao.InMemoryGameController;
+import quest.server.dao.GameController;
 
-import static quest.client.util.SerializationUtil.serializeAction;
+import static quest.common.util.SerializationUtil.serializeAction;
 import static quest.server.SerializationUtil.serializeMove;
 
 /**
@@ -23,7 +23,7 @@ public class InputHandler
 	 */
 	private static final Logger logger = LoggerFactory.getLogger(InputHandler.class);
 
-	private InMemoryGameController gameController;
+	private GameController gameController;
 
 	public void handle(Integer id, Client.Operation op, Post post)
 	{
@@ -66,7 +66,7 @@ public class InputHandler
 
 
 
-	public void setGameController(InMemoryGameController gameController)
+	public void setGameController(GameController gameController)
 	{
 		this.gameController = gameController;
 	}

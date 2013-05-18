@@ -15,29 +15,25 @@ message Character
 
     optional Point position = 3;
 
-    optional int32 health = 4;
+    optional uint32 health = 4;
 
     optional Weapon weapon = 5;
+
+    //скорость передвижения
+    optional double cellsPerSecond = 6;
+
 }
 
 message Weapon
 {
-    optional int32 strength = 1;
-    optional int32 range = 2;
+    optional uint32 strength = 1;
+    optional uint32 range = 2;
 }
 
 message Point
 {
     required int32 x = 1;
     required int32 y = 2;
-}
-
-message Shard
-{
-    optional string ip = 1;
-    required uint32 port = 2;
-    optional string name = 3;
-    optional uint32 playersCount = 4;
 }
 
 message Action

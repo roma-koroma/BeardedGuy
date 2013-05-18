@@ -16,7 +16,7 @@
 
         <dependency>
             <groupId>quest</groupId>
-            <artifactId>protocol</artifactId>
+            <artifactId>common</artifactId>
             <version>1.0</version>
         </dependency>
 
@@ -30,12 +30,6 @@
             <groupId>org.mockito</groupId>
             <artifactId>mockito-all</artifactId>
         </dependency>
-
-        <!--<dependency>-->
-            <!--<groupId>protopad</groupId>-->
-            <!--<artifactId>game-protocol</artifactId>-->
-            <!--<version>1.0</version>-->
-        <!--</dependency>-->
 
         <!-- Логирование-->
         <dependency>
@@ -60,13 +54,6 @@
             <groupId>cglib</groupId>
             <artifactId>cglib</artifactId>
             <version>2.2</version>
-        </dependency>
-
-        <!-- Сетевое взаимодействие-->
-        <dependency>
-            <groupId>io.netty</groupId>
-            <artifactId>netty</artifactId>
-            <version>3.5.7.Final</version>
         </dependency>
 
         <dependency>

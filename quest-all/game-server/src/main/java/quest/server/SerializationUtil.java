@@ -2,14 +2,14 @@ package quest.server;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import quest.client.model.BeardedGuy;
-import quest.client.model.Point;
+import quest.common.model.*;
 import quest.protocol.GameServer;
 
-import static quest.client.util.SerializationUtil.serializeGuy;
-import static quest.client.util.SerializationUtil.serializePoint;
+import static quest.common.util.SerializationUtil.serializeGuy;
+import static quest.common.util.SerializationUtil.serializePoint;
 
 /**
+ * Серверные методы сериализации.
  * @author Roman K.
  */
 public class SerializationUtil

@@ -5,15 +5,29 @@ package quest.client.model;
  */
 public enum Direction
 {
-    DOWN(0),
-    LEFT(1),
-    RIGHT(2),
-    UP(3);
+    DOWN(0, 270d),
+    LEFT(1, 180d),
+    RIGHT(2, 0d),
+    UP(3, 90d);
 
-    private int code;
+	private final double angle;
 
-    Direction(int code)
+	private final int code;
+
+	Direction(int code, double angle)
     {
         this.code = code;
+		this.angle = angle;
     }
+
+	public double getAngle()
+	{
+		return angle;
+	}
+
+	public int getCode()
+	{
+		return code;
+	}
+
 }
