@@ -65,4 +65,9 @@ public class Entity
 	{
 		this.id = id;
 	}
+
+	public long getId()
+	{
+		return id;
+	}
 }

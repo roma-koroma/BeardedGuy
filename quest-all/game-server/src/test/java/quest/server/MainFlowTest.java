@@ -197,7 +197,9 @@ public class MainFlowTest
 		AISystem ai = new AISystem(entityManager);
 		ai.update(dt);
 
-		SimulationSystem simulation = new SimulationSystem(entityManager);
+		QuadTree gameMap = new QuadTree(new QuadTree.AABB(new Point(300, 300), new Point(300, 300)), 4, 5 );
+		SimulationSystem simulation = new SimulationSystem(entityManager, gameMap);
+
 		simulation.update(dt);
 
 	}
@@ -231,7 +233,7 @@ public class MainFlowTest
 
 		ProjectionComponent projection = new ProjectionComponent();
 		projection.setRadius(10d);
-		projection.setPosition(new Point(4, 5));
+		projection.setNewPosition(new Point(4, 5));
 
 		HealthComponent health = new HealthComponent();
 		health.setHealth(100);
@@ -259,7 +261,7 @@ public class MainFlowTest
 		Entity wizard = new Entity(EntityManager.nextId());
 
 		ProjectionComponent projection = new ProjectionComponent();
-		projection.setPosition(new Point(5, 5));
+		projection.setNewPosition(new Point(5, 5));
 		projection.setRadius(10d);
 
 		HealthComponent health = new HealthComponent();

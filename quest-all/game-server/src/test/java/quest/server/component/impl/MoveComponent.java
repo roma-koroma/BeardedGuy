@@ -2,6 +2,7 @@ package quest.server.component.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import quest.common.model.Point;
 import quest.server.component.EntityComponent;
 
 /**
@@ -67,7 +68,12 @@ public class MoveComponent extends EntityComponent
 	public void update(double dt)
 	{
 		//подвигаем
-		//проверяем на коллизии.
+		ProjectionComponent proj = (ProjectionComponent) getOwner().getComponent("projection");
+		Point oldPosition = proj.getNewPosition();
+		float vx = (float) (Math.sin(direction) * velocity);
+		float vy = (float) (Math.cos(direction) * velocity);
+		Point newPosition = new Point(oldPosition.getX() + vx, oldPosition.getY() + vy);
+		proj.setNewPosition(newPosition);
 	}
 
 	public void move(double direction, double velocity)

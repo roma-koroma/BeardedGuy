@@ -1,0 +1,12 @@
+<entity>
+    <name>Health Pack</name>
+    <entityId>health_pack</entityId>
+    <components>
+        <component id="projection" />
+        <component id="collision" />
+        <component id="skillOnCollision">
+            <target target="collided"/>
+            <skill id="heal" value="50" />
+        </component>
+    </components>
+</entity>

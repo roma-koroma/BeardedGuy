@@ -2,11 +2,13 @@ package quest.server.component.system;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import quest.common.model.Point;
+import quest.server.QuadTree;
+import quest.server.component.Entity;
 import quest.server.component.EntityComponent;
 import quest.server.component.EntityManager;
 import quest.server.component.impl.CollisionComponent;
 import quest.server.component.impl.ProjectionComponent;
-import quest.server.model.GameMap;
 
 import java.util.List;
 
@@ -21,18 +23,20 @@ public class SimulationSystem extends GameSystem
 	 */
 	private static final Logger logger = LoggerFactory.getLogger(SimulationSystem.class);
 
-	private GameMap gameMap;
+	private QuadTree gameMap;
 
-	public SimulationSystem(EntityManager entityManager)
+	public SimulationSystem(EntityManager entityManager, QuadTree gameMap)
 	{
 		super(entityManager);
+		this.gameMap = gameMap;
+
 	}
 
 	@Override
 	public void update(double dt)
 	{
 		//обновляем движения
-		updateAll("move", dt);
+		moveAll(dt);
 
 		//атаки
 		updateAll("attack", dt);
@@ -40,9 +44,31 @@ public class SimulationSystem extends GameSystem
 		//каст
 		updateAll("cast", dt);
 
-		//проверяем на потенциальные коллизии.
+		//проверяем и решаем коллизии.
 		resolveCollisions(dt);
 
+	}
+
+	private void moveAll(double dt)
+	{
+		List<EntityComponent> entities = getEntityManager().getEntitiesByComponentId("move");
+
+		if (entities != null)
+		{
+			for (EntityComponent entity : entities)
+			{
+				//вычисляем новые позиции
+				entity.update(dt);
+
+				//обновляем их на карте
+				ProjectionComponent projection = (ProjectionComponent) entity.getOwner().getComponent("projection");
+				gameMap.updatePoint(
+					projection.getOwner().getId(),
+					projection.getPreviousPosition(),
+					projection.getNewPosition()
+					);
+			}
+		}
 	}
 
 	private void resolveCollisions(double dt)
@@ -56,10 +82,18 @@ public class SimulationSystem extends GameSystem
 				CollisionComponent collision = (CollisionComponent) entity;
 				ProjectionComponent proj = (ProjectionComponent) collision.getOwner().getComponent("projection");
 
-				//получить всех ближайшией сущности.
-				gameMap.isCollide();
+				//получить все ближайшие сущности.
+				List<Long> items = gameMap.retrieve(
+					new QuadTree.AABB(
+						proj.getNewPosition(), new Point(proj.getRadius(), proj.getRadius()))
+				);
 
-				//проверить каждую
+				for (Long item : items)
+				{
+					Entity collided = getEntityManager().getEntityById(item);
+					collision.collide(collided);
+					((CollisionComponent)collided.getComponent("collision")).collide(entity.getOwner());
+				}
 				entity.update(dt);
 			}
 		}
@@ -69,7 +103,7 @@ public class SimulationSystem extends GameSystem
 	{
 		List<EntityComponent> entities = getEntityManager().getEntitiesByComponentId(id);
 
-		if(entities != null)
+		if (entities != null)
 		{
 			for (EntityComponent entity : entities)
 			{

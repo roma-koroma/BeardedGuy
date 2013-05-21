@@ -47,6 +47,11 @@ public class EntityManager
 		entities.add(component);
 	}
 
+	public void remove(EntityComponent component)
+	{
+
+	}
+
 	public static long nextId()
 	{
 		return nextId++;
@@ -55,5 +60,10 @@ public class EntityManager
 	public List<EntityComponent> getEntitiesByComponentId(String familyId)
 	{
 		return components.get(familyId);
+	}
+
+	public Entity getEntityById(Long entityId)
+	{
+		return null;
 	}
 }

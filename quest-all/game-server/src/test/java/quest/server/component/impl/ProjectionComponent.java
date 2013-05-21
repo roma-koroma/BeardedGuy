@@ -18,6 +18,7 @@ public class ProjectionComponent extends EntityComponent
 
 	private Point position;
 	private double radius;
+	private Point previousPosition;
 
 
 	@Override
@@ -38,12 +39,13 @@ public class ProjectionComponent extends EntityComponent
 
 	}
 
-	public void setPosition(Point position)
+	public void setNewPosition(Point position)
 	{
+		this.previousPosition = this.position;
 		this.position = position;
 	}
 
-	public Point getPosition()
+	public Point getNewPosition()
 	{
 		return position;
 	}
@@ -56,5 +58,10 @@ public class ProjectionComponent extends EntityComponent
 	public double getRadius()
 	{
 		return radius;
+	}
+
+	public Point getPreviousPosition()
+	{
+		return previousPosition;
 	}
 }

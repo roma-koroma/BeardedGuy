@@ -1,0 +1,35 @@
+<entities>
+    <entity>
+        <name>Goblin</name>
+        <entityId>goblin</entityId>
+        <components>
+            <component id="projection"/>
+            <component id="collision"/>
+            <component id="skillOnCollision">
+                <target target="collided"/>
+                <skill id="heal" value="50"/>
+            </component>
+
+            <component id="armor">
+
+            </component>
+        </components>
+    </entity>
+
+    <entity>
+        <name>spiked armor</name>
+        <entityId>spiked_armor</entityId>
+        <components>
+            <!--<component id="armor"/>-->
+            <component id="collision"/>
+            <component id="skillOnCollision">
+                <target target="collided"/>
+                <skill id="spike" value="-50"/>
+            </component>
+        </components>
+    </entity>
+
+    <entity>
+        <name>Bag</name>
+    </entity>
+</entities>

@@ -44,12 +44,12 @@ public class RamAIComponent extends AIComponent
 			moveComponent.move(90, moveComponent.getMaxVelocity());
 			moveComponent.stop();
 
-//			long entityId = gameMap.findNearestEntity(position.getPosition()); // на карте есть только сущности
+//			long entityId = gameMap.findNearestEntity(position.getNewPosition()); // на карте есть только сущности
 //			// имеющие позицию.
 //
-//			ProjectionComponent targetPosition = ((ProjectionComponent) entity.getComponent("position")).getPosition();
+//			ProjectionComponent targetPosition = ((ProjectionComponent) entity.getComponent("position")).getNewPosition();
 //
-//			double angle = directionAngle(position.getPosition(), targetPosition.getPosition());
+//			double angle = directionAngle(position.getNewPosition(), targetPosition.getNewPosition());
 //
 //			//меняем состояние на "Движение"
 //			attachMessage("move", new MoveMessage(angle));
